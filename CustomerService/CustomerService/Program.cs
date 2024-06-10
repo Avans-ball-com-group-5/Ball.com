@@ -1,8 +1,8 @@
 ﻿using CustomerService.Messaging;
+using CustomerService.Services;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Reflection;
 
 namespace CustomerService
 {
@@ -20,17 +20,18 @@ namespace CustomerService
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddMassTransitServices(ConfigureBusEndpoints);
-
+                    services.ConfigureHandlers();
                 });
 
-        // This method is used to configure the endpoints that the application will use
-        private static void ConfigureBusEndpoints(IBusRegistrationConfigurator configurator)
+        // This method is used to configure the handlers that the application will use through DI
+        private static IServiceCollection ConfigureHandlers(this IServiceCollection services)
         {
-            // Add all consumers here for DI. This will allow the consumers to be resolved by the DI container
-            configurator.AddConsumer<CustomerConsumer, CustomerConsumerDefinition>();
+            services.AddScoped<CustomerHandler>();
+
+            return services;
         }
 
-        public static IServiceCollection AddMassTransitServices(this IServiceCollection services, Action<IBusRegistrationConfigurator> busConfigure)
+        private static IServiceCollection AddMassTransitServices(this IServiceCollection services, Action<IBusRegistrationConfigurator> busConfigure)
         {
             services.AddMassTransit(x =>
             {
@@ -52,6 +53,13 @@ namespace CustomerService
             });
 
             return services;
+        }
+
+        // This method is used to configure the endpoints that the application will use
+        private static void ConfigureBusEndpoints(IBusRegistrationConfigurator configurator)
+        {
+            // Add all consumers here for DI. This will allow the consumers to be resolved by the DI container
+            configurator.AddConsumer<RegisterCustomerServiceConsumer, RegisterCustomerServiceConsumerDefinition>();
         }
     }
 }

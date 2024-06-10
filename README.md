@@ -33,6 +33,8 @@ docker run -p 15672:15672 -p 5672:5672 masstransit/rabbitmq
 4. Go to localhost:15672 in your browser and log in with guest/guest.
 5. See incoming messages in the Queues tab.
 
+### RabbitMq & Masstransit quick guide:
+https://masstransit.io/quick-starts/rabbitmq
 
 # Project Requirements and Description:
 Customer: Ball.com, a retailer going global.
