@@ -27,6 +27,7 @@ namespace CustomerService
         private static IServiceCollection ConfigureHandlers(this IServiceCollection services)
         {
             services.AddScoped<CustomerHandler>();
+            // This adds a service that will run in the background and send messages to the bus every 30 seconds for testing purposes
             //services.AddHostedService<BusSenderBackgroundService>();
 
             return services;

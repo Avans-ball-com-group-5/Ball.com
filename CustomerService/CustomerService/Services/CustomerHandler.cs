@@ -19,7 +19,7 @@ namespace CustomerService.Services
 
             await Bus.Publish(
                 new CustomerServiceRegistered(
-                    Guid.Parse(registerEvent.Id),
+                    registerEvent.Id,
                     registerEvent.Name,
                     registerEvent.Email,
                     registerEvent.Phone,

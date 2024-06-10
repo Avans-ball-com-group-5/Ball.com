@@ -5,7 +5,7 @@ namespace Domain.Events
     [Serializable]
     public class RegisterCustomerService
     {
-        public RegisterCustomerService(string id, string name, string email, string phone, string message)
+        public RegisterCustomerService(Guid id, string name, string email, string phone, string message)
         {
             Id = id;
             Name = name;
@@ -15,7 +15,7 @@ namespace Domain.Events
         }
 
         [JsonPropertyName("id")]
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         [JsonPropertyName("name")]
         public string Name { get; set; }
