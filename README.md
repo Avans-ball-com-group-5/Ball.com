@@ -14,6 +14,7 @@
     <PackageReference Include="MassTransit.Abstractions" Version="8.2.2" />
     <PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
     <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.3.1" />
+    <PackageReference Include="MassTransit.Newtonsoft" Version="8.2.2" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.2" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
 ```
@@ -21,17 +22,19 @@
 2. Add a class that implements the ConsumerDefinition class.
 2. Add the consumer to the ConfigureBusEndpoints method in the Program.cs file.
 4. Profit.
-#### For more info check Costumer Consumer in the CostumerService.
+5. You can use a backgroundservice to check if the consumer works. For more info check the BusSenderBackgroundService in the CustomerService
+#### For more info check Customer Consumer in the CostumerService.
 
 ## Setting up docker to run services locally:
 1. Install Docker Desktop.
-2. Pull the masstransit/rabbitmq image(latest if fine).
+2. Pull the masstransit/rabbitmq image(latest is not fine just pull masstransit/rabbitmq).
 3. Run the image with the following command (or in docker desktop, either is fine):
 ```
 docker run -p 15672:15672 -p 5672:5672 masstransit/rabbitmq
 ```
 4. Go to localhost:15672 in your browser and log in with guest/guest.
 5. See incoming messages in the Queues tab.
+6. If they land in skipped or error something is going wrong, use the backgroundservice to test this, works better than injecting via rabbitMq manager
 
 ### RabbitMq & Masstransit quick guide:
 https://masstransit.io/quick-starts/rabbitmq
