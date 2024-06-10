@@ -23,6 +23,7 @@
 2. Add the consumer to the ConfigureBusEndpoints method in the Program.cs file.
 4. Profit.
 5. You can use a backgroundservice to check if the consumer works. For more info check the BusSenderBackgroundService in the CustomerService
+       (Btw also make sure to add this in the DI container, check the comments in the CustomerService Program.cs for more info)
 #### For more info check Customer Consumer in the CostumerService.
 
 ## Setting up docker to run services locally:
