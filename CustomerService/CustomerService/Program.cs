@@ -27,6 +27,7 @@ namespace CustomerService
         private static IServiceCollection ConfigureHandlers(this IServiceCollection services)
         {
             services.AddScoped<CustomerHandler>();
+            //services.AddHostedService<BusSenderBackgroundService>();
 
             return services;
         }
@@ -43,6 +44,8 @@ namespace CustomerService
                 // This configures rabbitmq, should be environment variables later on.
                 x.UsingRabbitMq((context, cfg) =>
                 {
+                    cfg.UseNewtonsoftJsonSerializer();
+                    cfg.UseNewtonsoftJsonDeserializer();
                     cfg.Host("localhost", "/", h =>
                     {
                         h.Username("guest");
