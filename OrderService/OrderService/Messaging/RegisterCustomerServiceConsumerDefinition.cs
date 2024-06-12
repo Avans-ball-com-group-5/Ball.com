@@ -1,10 +1,10 @@
 ﻿using MassTransit;
 
-namespace CustomerService.Messaging
+namespace OrderService.Messaging
 {
     public class RegisterCustomerServiceConsumerDefinition : ConsumerDefinition<RegisterCustomerServiceConsumer>
     {
-        public RegisterCustomerServiceConsumerDefinition() 
+        public RegisterCustomerServiceConsumerDefinition()
         {
             // The endpoint name is the name of the service that will be accepting the message
             EndpointName = "register-customer-service";

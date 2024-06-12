@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
-using CustomerService.Services;
-using CustomerService.Messaging;
+using OrderService.Messaging;
+using OrderService.Services;
 
 namespace OrderService
 {

@@ -1,8 +1,8 @@
-﻿using CustomerService.Services;
-using Domain.Events;
-using MassTransit;
+﻿using MassTransit;
+using OrderDomain.Events;
+using OrderService.Services;
 
-namespace CustomerService.Messaging
+namespace OrderService.Messaging
 {
     public class RegisterCustomerServiceConsumer : IConsumer<RegisterCustomerService>
     {

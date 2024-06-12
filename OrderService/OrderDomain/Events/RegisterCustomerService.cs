@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Domain.Events
+namespace OrderDomain.Events
 {
     [Serializable]
     public class RegisterCustomerService

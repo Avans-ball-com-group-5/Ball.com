@@ -1,8 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk.Worker">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <LangVersion>9.0</LangVersion>
+	  <ImplicitUsings>enable</ImplicitUsings>
+	  <Nullable>enable</Nullable>
+	  <OutputType>Exe</OutputType>
+	  <StartupObject>OrderService.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,5 +16,9 @@
 	  <PackageReference Include="MassTransit.Newtonsoft" Version="8.2.2" />
 	  <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.2" />
 	  <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OrderDomain\OrderDomain.csproj" />
   </ItemGroup>
 </Project>

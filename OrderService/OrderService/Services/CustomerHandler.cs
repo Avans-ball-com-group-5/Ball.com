@@ -1,7 +1,7 @@
-﻿using Domain.Events;
-using MassTransit;
+﻿using MassTransit;
+using OrderDomain.Events;
 
-namespace CustomerService.Services
+namespace OrderService.Services
 {
     public class CustomerHandler
     {

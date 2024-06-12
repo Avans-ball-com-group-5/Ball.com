@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Domain.Events
+namespace OrderDomain.Events
 {
     public class CustomerServiceRegistered
     {
@@ -22,10 +22,10 @@ namespace Domain.Events
 
         [JsonPropertyName("email")]
         public string Email { get; set; }
-        
+
         [JsonPropertyName("phone")]
         public string Phone { get; set; }
-        
+
         [JsonPropertyName("message")]
         public string Message { get; set; }
 
