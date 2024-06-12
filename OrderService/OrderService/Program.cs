@@ -31,7 +31,7 @@ namespace OrderService
         // This method is used to configure the handlers that the application will use through DI
         private static IServiceCollection ConfigureHandlers(this IServiceCollection services)
         {
-            services.AddScoped<CustomerHandler>();
+            services.AddScoped<OrderHandler>();
             // This adds a service that will run in the background and send messages to the bus every 30 seconds for testing purposes
             //services.AddHostedService<BusSenderBackgroundService>();
 
@@ -68,7 +68,7 @@ namespace OrderService
         private static void ConfigureBusEndpoints(IBusRegistrationConfigurator configurator)
         {
             // Add all consumers here for DI. This will allow the consumers to be resolved by the DI container
-            configurator.AddConsumer<RegisterCustomerServiceConsumer, RegisterCustomerServiceConsumerDefinition>();
+            configurator.AddConsumer<PaymentCompletedConsumer, PaymentCompletedConsumerDefinition>();
         }
     }
 }

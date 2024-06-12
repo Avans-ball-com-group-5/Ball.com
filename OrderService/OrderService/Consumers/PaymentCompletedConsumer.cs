@@ -6,8 +6,8 @@ namespace OrderService.Messaging
 {
     public class RegisterCustomerServiceConsumer : IConsumer<RegisterCustomerService>
     {
-        private readonly CustomerHandler _customerHandler;
-        public RegisterCustomerServiceConsumer(CustomerHandler customerHandler)
+        private readonly OrderHandler _customerHandler;
+        public RegisterCustomerServiceConsumer(OrderHandler customerHandler)
         {
             _customerHandler = customerHandler;
         }
