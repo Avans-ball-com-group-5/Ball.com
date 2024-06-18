@@ -38,5 +38,20 @@ namespace PaymentService.Handlers
                 await bus.Publish(paymentCreatedEvent);
             }
         }
+
+        public async Task HandleAfterPayCompletedEvent(AfterPayCompletedEvent message)
+        {
+            // Update db entity to completed
+            // Get orderId from db entity
+
+            // Send OrderPaymentCompletedEvent
+            var orderPaymentCompletedEvent = new OrderPaymentCompletedEvent()
+            {
+                OrderId = Guid.NewGuid(),
+                PaymentId = message.PaymentId
+            };
+
+            await bus.Publish(orderPaymentCompletedEvent);
+        }
     }
 }
