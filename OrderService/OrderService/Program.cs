@@ -26,7 +26,7 @@ namespace OrderService
         // This method is used to configure the handlers that the application will use through DI
         private static IServiceCollection ConfigureHandlers(this IServiceCollection services)
         {
-            services.AddScoped<OrderPublisher>();
+            services.AddScoped<OrderHandler>();
             // This adds a service that will run in the background and send messages to the bus every 30 seconds for testing purposes
             //services.AddHostedService<BusSenderBackgroundService>();
 

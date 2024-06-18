@@ -10,6 +10,6 @@ namespace OrderDomain.Events
         [JsonPropertyName("isCompleted")]
         public bool IsCompleted { get; set; }
         [JsonPropertyName("order")]
-        public Order Order { get; set; } = new();
+        public Guid OrderId { get; set; }
     }
 }

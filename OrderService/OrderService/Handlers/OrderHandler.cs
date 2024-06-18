@@ -4,10 +4,10 @@ using OrderDomain.Events;
 
 namespace OrderService.Services
 {
-    public class OrderPublisher
+    public class OrderHandler
     {
         private readonly IBus Bus;
-        public OrderPublisher(IBus bus)
+        public OrderHandler(IBus bus)
         {
             Bus = bus;
         }
@@ -20,12 +20,12 @@ namespace OrderService.Services
             await Bus.Publish(
                 new OrderPlacedEvent()
                 {
-                    Order = order,
-                    Message = "order was placed, waiting for payment"
+                    OrderId = order.Id,
+                    Timestamp = DateTime.UtcNow,
                 });
         }
 
-        public async Task ManageOrder(Order order) {
+        public async Task ManageOrder(PaymentCompletedEvent paymentCompletedEvent) {
             // Item picking
 
             // Order packaging
@@ -35,7 +35,7 @@ namespace OrderService.Services
             await Bus.Publish(
                 new OrderReadyForShippingEvent()
                 {
-                    Order = order,
+                    OrderId = paymentCompletedEvent.OrderId,
                     Message = "order is ready for shipment"
                 });
         }

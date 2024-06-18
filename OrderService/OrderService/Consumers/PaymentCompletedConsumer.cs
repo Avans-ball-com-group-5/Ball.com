@@ -6,8 +6,8 @@ namespace OrderService.Messaging
 {
     public class PaymentCompletedConsumer : IConsumer<PaymentCompletedEvent>
     {
-        private readonly OrderPublisher _orderPublisher;
-        public PaymentCompletedConsumer(OrderPublisher orderPublisher)
+        private readonly OrderHandler _orderPublisher;
+        public PaymentCompletedConsumer(OrderHandler orderPublisher)
         {
             _orderPublisher = orderPublisher;
         }
@@ -15,7 +15,7 @@ namespace OrderService.Messaging
         public async Task Consume(ConsumeContext<PaymentCompletedEvent> context)
         {
             Console.WriteLine("Starting order management...");
-            await _orderPublisher.ManageOrder(context.Message.Order);
+            await _orderPublisher.ManageOrder(context.Message);
         }
     }
 }

@@ -12,6 +12,6 @@ namespace OrderDomain.Events
         [JsonPropertyName("message")]
         public string Message { get; set; } = string.Empty;
         [JsonPropertyName("order")]
-        public Order Order { get; set; } = new();
+        public Guid OrderId { get; set; }
     }
 }
