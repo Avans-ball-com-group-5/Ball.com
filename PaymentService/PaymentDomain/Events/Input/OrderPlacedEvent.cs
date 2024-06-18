@@ -16,5 +16,8 @@ namespace PaymentDomain.Events.Input
 
         [JsonPropertyName("isAfterPay")]
         public bool IsAfterPay { get; set; }
+
+        [JsonPropertyName("price")]
+        public decimal Price { get; set; }
     }
 }
