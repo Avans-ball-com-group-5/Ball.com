@@ -28,7 +28,7 @@ namespace CustomerService
         {
             services.AddScoped<CustomerHandler>();
             // This adds a service that will run in the background and send messages to the bus every 30 seconds for testing purposes
-            //services.AddHostedService<BusSenderBackgroundService>();
+            services.AddHostedService<BusSenderBackgroundService>();
 
             return services;
         }
@@ -47,11 +47,7 @@ namespace CustomerService
                 {
                     cfg.UseNewtonsoftJsonSerializer();
                     cfg.UseNewtonsoftJsonDeserializer();
-                    cfg.Host("localhost", "/", h =>
-                    {
-                        h.Username("guest");
-                        h.Password("guest");
-                    });
+                    cfg.Host("amqp://guest:guest@rabbitmq");
                     cfg.ConfigureEndpoints(context);
                 });
             });

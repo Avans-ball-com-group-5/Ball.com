@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Domain.Events.Output
+namespace CustomerDomain.Events.Output
 {
     public class CustomerServiceRegistered
     {
