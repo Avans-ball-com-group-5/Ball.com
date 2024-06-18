@@ -1,4 +1,4 @@
-﻿using Domain.Events;
+﻿using Domain.Events.Input;
 using MassTransit;
 using Microsoft.Extensions.Hosting;
 

@@ -1,4 +1,5 @@
-﻿using Domain.Events;
+﻿using Domain.Events.Input;
+using Domain.Events.Output;
 using MassTransit;
 
 namespace CustomerService.Services
@@ -13,13 +14,13 @@ namespace CustomerService.Services
 
         public async Task RegisterCustomerService(RegisterCustomerService registerEvent)
         {
-            // Do something with the customer info, like saving it to a database or sending it to another service
+            // Do something with the ticket info, like saving it to a database or sending it to another service
             // For now, we'll just publish the created event
             Console.WriteLine("Registering customer service...");
 
             await Bus.Publish(
                 new CustomerServiceRegistered(
-                    registerEvent.Id,
+                    registerEvent.CustomerId,
                     registerEvent.Name,
                     registerEvent.Email,
                     registerEvent.Phone,

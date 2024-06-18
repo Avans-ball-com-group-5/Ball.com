@@ -1,5 +1,5 @@
 ﻿using CustomerService.Services;
-using Domain.Events;
+using Domain.Events.Input;
 using MassTransit;
 
 namespace CustomerService.Messaging
@@ -14,8 +14,6 @@ namespace CustomerService.Messaging
 
         public async Task Consume(ConsumeContext<RegisterCustomerService> context)
         {
-            // Do something with the customer info, like saving it to a database or sending it to another service
-            Console.WriteLine("Message recieved!");
             await _customerHandler.RegisterCustomerService(context.Message);
         }
     }
