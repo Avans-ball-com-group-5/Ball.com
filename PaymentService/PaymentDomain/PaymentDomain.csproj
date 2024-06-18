@@ -6,9 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Events\Input\" />
-    <Folder Include="Events\Output\" />
-  </ItemGroup>
-
 </Project>
