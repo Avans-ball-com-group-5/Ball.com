@@ -2,14 +2,13 @@
 
 namespace OrderDomain.Events
 {
-    [Serializable]
-    public class PaymentCompletedEvent
+    public class OrderPlacedEvent
     {
         [JsonPropertyName("message")]
         public string Message { get; set; } = string.Empty;
-        [JsonPropertyName("isCompleted")]
-        public bool IsCompleted { get; set; }
         [JsonPropertyName("order")]
         public Order Order { get; set; } = new();
+        [JsonPropertyName("orderDate")]
+        public DateTime OrderDate { get; set; } = DateTime.Now;
     }
 }

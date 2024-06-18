@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,7 +26,7 @@ namespace OrderService
         // This method is used to configure the handlers that the application will use through DI
         private static IServiceCollection ConfigureHandlers(this IServiceCollection services)
         {
-            services.AddScoped<OrderHandler>();
+            services.AddScoped<OrderPublisher>();
             // This adds a service that will run in the background and send messages to the bus every 30 seconds for testing purposes
             //services.AddHostedService<BusSenderBackgroundService>();
 

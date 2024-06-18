@@ -4,19 +4,18 @@ using OrderService.Services;
 
 namespace OrderService.Messaging
 {
-    public class RegisterCustomerServiceConsumer : IConsumer<RegisterCustomerService>
+    public class PaymentCompletedConsumer : IConsumer<PaymentCompletedEvent>
     {
-        private readonly OrderHandler _customerHandler;
-        public RegisterCustomerServiceConsumer(OrderHandler customerHandler)
+        private readonly OrderPublisher _orderPublisher;
+        public PaymentCompletedConsumer(OrderPublisher orderPublisher)
         {
-            _customerHandler = customerHandler;
+            _orderPublisher = orderPublisher;
         }
 
-        public async Task Consume(ConsumeContext<RegisterCustomerService> context)
+        public async Task Consume(ConsumeContext<PaymentCompletedEvent> context)
         {
-            // Do something with the customer info, like saving it to a database or sending it to another service
-            Console.WriteLine("Message recieved!");
-            await _customerHandler.RegisterCustomerService(context.Message);
+            Console.WriteLine("Starting order management...");
+            await _orderPublisher.ManageOrder(context.Message.Order);
         }
     }
 }

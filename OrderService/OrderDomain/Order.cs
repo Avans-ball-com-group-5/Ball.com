@@ -11,6 +11,7 @@ namespace OrderDomain
     {
         [JsonPropertyName("id")]
         public Guid Id { get; set; } = Guid.NewGuid();
+        [JsonPropertyName("customer")]
         public Customer Customer { get; set; } = new Customer();
     }
 }
