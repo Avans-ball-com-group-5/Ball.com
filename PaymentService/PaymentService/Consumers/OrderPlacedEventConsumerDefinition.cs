@@ -6,7 +6,7 @@ namespace PaymentService.Consumers
     {
         public OrderPlacedEventConsumerDefinition()
         {
-            EndpointName = "order-placed-event";
+            EndpointName = "order-placed";
         }
     }
 }

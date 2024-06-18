@@ -6,7 +6,7 @@ namespace PaymentService.Consumers
 {
     public class OrderPlacedEventConsumer : IConsumer<OrderPlacedEvent>
     {
-        private PaymentHandler paymentHandler;
+        private readonly PaymentHandler paymentHandler;
 
         public OrderPlacedEventConsumer(PaymentHandler paymentHandler)
         {
@@ -15,7 +15,7 @@ namespace PaymentService.Consumers
 
         public async Task Consume(ConsumeContext<OrderPlacedEvent> context)
         {
-            await paymentHandler.HandlePaymentRequest(context.Message);
+            await paymentHandler.HandleOrderPlacedEvent(context.Message);
         }
     }
 }
