@@ -13,28 +13,29 @@ namespace PaymentService.Handlers
             this.bus = bus;
         }
 
-        public async Task HandlePaymentRequest(OrderPlacedEvent request)
+        public async Task HandleOrderPlacedEvent(OrderPlacedEvent request)
         {
-            // Simulate payment success/failure
-            if (new Random().Next(0, 10) != 1)
+            // Add payment to database here
+
+            // Send payment created event
+            if (request.IsAfterPay)
             {
-                Console.WriteLine($"Payment for order {request.OrderId} was successful.");
-                // Add payment to database.
-                await bus.Publish(
-                    new PaymentSuccessEvent()
-                    {
-                        OrderId = request.OrderId
-                    });
+                var paymentCreatedEvent = new PaymentCreatedEvent()
+                {
+                    OrderId = request.OrderId,
+                };
+
+                await bus.Publish(paymentCreatedEvent);
             }
             else
             {
-                Console.WriteLine($"Payment for order {request.OrderId} failed.");
-                await bus.Publish(
-                    new PaymentFailedEvent()
-                    {
-                        OrderId = request.OrderId,
-                        Reason = "Payment failed"
-                    });
+                var paymentCreatedEvent = new PaymentCreatedEvent()
+                {
+                    OrderId = request.OrderId,
+                    IsCompleted = true
+                };
+
+                await bus.Publish(paymentCreatedEvent);
             }
         }
     }

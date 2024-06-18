@@ -17,7 +17,8 @@ namespace PaymentService
         {
             do
             {
-                await bus.Publish(new OrderPlacedEvent(Guid.NewGuid(), "message"));
+                await bus.Publish(new OrderPlacedEvent(Guid.NewGuid(), false));
+                await bus.Publish(new OrderPlacedEvent(Guid.NewGuid(), true));
                 await Task.Delay(3000, stoppingToken);
             } while (true);
         }
