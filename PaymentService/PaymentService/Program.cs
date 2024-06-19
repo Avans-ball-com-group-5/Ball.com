@@ -1,17 +1,16 @@
-﻿using CustomerService.Messaging;
-using CustomerService.Services;
-using MassTransit;
+﻿using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PaymentService.Consumers;
+using PaymentService.Handlers;
 
-namespace CustomerService
+namespace PaymentService
 {
     public static class Program
     {
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
-            Console.WriteLine("Hello World!");
         }
 
         // This method is used to configure the host and services that the application will use, including consumers(endpoints)
@@ -26,9 +25,9 @@ namespace CustomerService
         // This method is used to configure the handlers that the application will use through DI
         private static IServiceCollection ConfigureHandlers(this IServiceCollection services)
         {
-            services.AddScoped<CustomerHandler>();
+            services.AddScoped<PaymentHandler>();
             // This adds a service that will run in the background and send messages to the bus every 30 seconds for testing purposes
-            services.AddHostedService<BusSenderBackgroundService>();
+            //services.AddHostedService<BusSenderBackgroundService>();
 
             return services;
         }
@@ -47,7 +46,11 @@ namespace CustomerService
                 {
                     cfg.UseNewtonsoftJsonSerializer();
                     cfg.UseNewtonsoftJsonDeserializer();
-                    cfg.Host("amqp://guest:guest@rabbitmq");
+                    cfg.Host("localhost", "/", h =>
+                    {
+                        h.Username("guest");
+                        h.Password("guest");
+                    });
                     cfg.ConfigureEndpoints(context);
                 });
             });
@@ -59,7 +62,7 @@ namespace CustomerService
         private static void ConfigureBusEndpoints(IBusRegistrationConfigurator configurator)
         {
             // Add all consumers here for DI. This will allow the consumers to be resolved by the DI container
-            configurator.AddConsumer<RegisterCustomerServiceConsumer, RegisterCustomerServiceConsumerDefinition>();
+            configurator.AddConsumer<OrderPlacedEventConsumer, OrderPlacedEventConsumerDefinition>();
         }
     }
 }

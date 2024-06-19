@@ -1,8 +1,8 @@
-﻿using CustomerDomain.Events.Input;
-using MassTransit;
+﻿using MassTransit;
 using Microsoft.Extensions.Hosting;
+using PaymentDomain.Events.Input;
 
-namespace CustomerService
+namespace PaymentService
 {
     public class BusSenderBackgroundService : BackgroundService
     {
@@ -17,7 +17,8 @@ namespace CustomerService
         {
             do
             {
-                await bus.Publish(new RegisterCustomerService(Guid.NewGuid(), "John Doe", "email", "phone", "message"));
+                await bus.Publish(new OrderPlacedEvent(Guid.NewGuid(), false));
+                await bus.Publish(new OrderPlacedEvent(Guid.NewGuid(), true));
                 await Task.Delay(30000, stoppingToken);
             } while (true);
         }

@@ -1,17 +1,17 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Domain.Events
+namespace CustomerDomain.Events.Input
 {
-    public class CustomerServiceRegistered
+    [Serializable]
+    public class RegisterCustomerService
     {
-        public CustomerServiceRegistered(Guid customerId, string name, string email, string phone, string message, Guid ticketId)
+        public RegisterCustomerService(Guid id, string name, string email, string phone, string message)
         {
-            CustomerId = customerId;
+            CustomerId = id;
             Name = name;
             Email = email;
             Phone = phone;
             Message = message;
-            TicketId = ticketId;
         }
 
         [JsonPropertyName("customerId")]
@@ -22,14 +22,11 @@ namespace Domain.Events
 
         [JsonPropertyName("email")]
         public string Email { get; set; }
-        
+
         [JsonPropertyName("phone")]
         public string Phone { get; set; }
-        
+
         [JsonPropertyName("message")]
         public string Message { get; set; }
-
-        [JsonPropertyName("ticketId")]
-        public Guid TicketId { get; set; }
     }
 }

@@ -1,13 +1,13 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Domain
+namespace CustomerDomain
 {
     public class Customer
     {
         [JsonPropertyName("id")]
         public Guid Id { get; set; } = Guid.NewGuid();
 
-        [JsonPropertyName ("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
 
         [JsonPropertyName("email")]
