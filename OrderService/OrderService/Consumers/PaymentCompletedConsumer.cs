@@ -1,8 +1,8 @@
 ﻿using MassTransit;
 using OrderDomain.Events;
-using OrderService.Services;
+using OrderService.Handlers;
 
-namespace OrderService.Messaging
+namespace OrderService.Consumers
 {
     public class PaymentCompletedConsumer : IConsumer<PaymentCompletedEvent>
     {

@@ -1,42 +1,59 @@
 ﻿using MassTransit;
 using OrderDomain;
 using OrderDomain.Events;
+using OrderDomain.Services;
 
-namespace OrderService.Services
+namespace OrderService.Handlers
 {
     public class OrderHandler
     {
-        private readonly IBus Bus;
-        public OrderHandler(IBus bus)
+        private readonly IBus _bus;
+        private readonly IOrderRepository _orderRepository;
+        public OrderHandler(IBus bus, IOrderRepository orderRepository)
         {
-            Bus = bus;
+            _bus = bus;
+            _orderRepository = orderRepository;
         }
 
         public async Task PlaceOrder(Order order)
         {
-            // Do something with the order like saving to database, and publish created event
-            Console.WriteLine("Creating order");
-
-            await Bus.Publish(
-                new OrderPlacedEvent()
-                {
-                    OrderId = order.Id,
-                    Timestamp = DateTime.UtcNow,
-                });
+            // Order was placed, store event and publish to event bus
+            var orderPlacedEvent = new OrderPlacedEvent()
+            {
+                OrderId = order.Id,
+                Timestamp = DateTime.UtcNow,
+            };
+            _orderRepository.SaveOrderEvent(orderPlacedEvent);
+            await _bus.Publish(orderPlacedEvent);
         }
 
-        public async Task ManageOrder(PaymentCompletedEvent paymentCompletedEvent) {
-            // Item picking
-
-            // Order packaging
+        public async Task ManageOrder(PaymentCompletedEvent paymentCompletedEvent)
+        {
+            // Item picking & Order packaging
+            // TODO: Remove dummy data
+            List<ItemRef> itemRefs = new()
+            {
+                new()
+                {
+                    Amount = 1
+                },
+                new()
+                {
+                    Amount = 1
+                }
+            };
+            var orderPackagedEvent = new OrderPackagedEvent()
+            {
+                Items = itemRefs
+            };
+            _orderRepository.SaveOrderEvent(orderPackagedEvent);
 
             // Logistics selection
 
-            await Bus.Publish(
+            await _bus.Publish(
                 new OrderReadyForShippingEvent()
                 {
                     OrderId = paymentCompletedEvent.OrderId,
-                    Message = "order is ready for shipment"
                 });
         }
     }

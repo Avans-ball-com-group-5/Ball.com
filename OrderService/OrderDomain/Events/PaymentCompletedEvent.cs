@@ -3,13 +3,11 @@
 namespace OrderDomain.Events
 {
     [Serializable]
-    public class PaymentCompletedEvent
+    public class PaymentCompletedEvent : OrderBaseEvent
     {
-        [JsonPropertyName("message")]
-        public string Message { get; set; } = string.Empty;
         [JsonPropertyName("isCompleted")]
         public bool IsCompleted { get; set; }
-        [JsonPropertyName("order")]
-        public Guid OrderId { get; set; }
+        [JsonPropertyName("paymentId")]
+        public Guid PaymentId { get; set; }
     }
 }

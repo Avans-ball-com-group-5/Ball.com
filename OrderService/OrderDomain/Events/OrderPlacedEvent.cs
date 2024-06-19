@@ -2,11 +2,7 @@
 
 namespace OrderDomain.Events
 {
-    public class OrderPlacedEvent
+    public class OrderPlacedEvent : OrderBaseEvent
     {
-        [JsonPropertyName("orderId")]
-        public Guid OrderId { get; set; }
-        [JsonPropertyName("timestamp")]
-        public DateTime Timestamp { get; set; }
     }
 }

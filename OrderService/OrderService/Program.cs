@@ -1,8 +1,10 @@
 using Microsoft.Extensions.Hosting;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
-using OrderService.Messaging;
-using OrderService.Services;
+using OrderService.Consumers;
+using OrderService.Handlers;
+using OrderSQLInfrastructure;
+using Microsoft.EntityFrameworkCore;
 
 namespace OrderService
 {
@@ -29,7 +31,8 @@ namespace OrderService
             services.AddScoped<OrderHandler>();
             // This adds a service that will run in the background and send messages to the bus every 30 seconds for testing purposes
             //services.AddHostedService<BusSenderBackgroundService>();
-
+            services.AddDbContext<OrderEventDbContext>(options =>
+                options.UseSqlServer("TODO", c => c.MigrationsAssembly("OrderSQLInfrastructure")), ServiceLifetime.Singleton);
             return services;
         }
 

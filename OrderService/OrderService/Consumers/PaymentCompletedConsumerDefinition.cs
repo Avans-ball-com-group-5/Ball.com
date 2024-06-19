@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 
-namespace OrderService.Messaging
+namespace OrderService.Consumers
 {
     public class PaymentCompletedConsumerDefinition : ConsumerDefinition<PaymentCompletedConsumer>
     {

@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 
 namespace OrderDomain.Events
 {
-    public class OrderReadyForShippingEvent : OrderBaseEvent
+    public class OrderPackagedEvent : OrderBaseEvent
     {
+        [JsonPropertyName("items")]
+        public List<ItemRef> Items { get; set; } = new();
     }
 }
