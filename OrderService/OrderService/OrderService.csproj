@@ -30,5 +30,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OrderDomain\OrderDomain.csproj" />
+    <ProjectReference Include="..\OrderSQLInfrastructure\OrderSQLInfrastructure.csproj" />
   </ItemGroup>
 </Project>

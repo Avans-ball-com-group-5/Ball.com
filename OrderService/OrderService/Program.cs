@@ -32,7 +32,7 @@ namespace OrderService
             // This adds a service that will run in the background and send messages to the bus every 30 seconds for testing purposes
             //services.AddHostedService<BusSenderBackgroundService>();
             services.AddDbContext<OrderEventDbContext>(options =>
-                options.UseSqlServer("TODO", c => c.MigrationsAssembly("OrderSQLInfrastructure")), ServiceLifetime.Singleton);
+                options.UseSqlServer("Server=ordersql;Database=OrderDB;User=sa;Password=Your_password123;TrustServerCertificate=True", c => c.MigrationsAssembly("OrderSQLInfrastructure")), ServiceLifetime.Singleton);
             return services;
         }
 
