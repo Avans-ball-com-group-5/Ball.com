@@ -25,21 +25,21 @@ namespace OrderService.Services
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             var orderId = Guid.NewGuid();
-            PlaceOrderEvent @event = new()
+            
+            PlaceOrderEvent @event = new(orderId)
             {
-                OrderId = orderId,
-                EventType = "PlaceOrder",
                 Timestamp = DateTime.UtcNow,
-                EventData = "{'Name': 'John Doe', 'Email': 'email', 'Phone': 'phone', 'Message': 'message'}"
+                Order = new()
+                {
+                    Id = orderId,
+                }
             };
             Console.WriteLine("Sending PlaceOrderEvent to bus...");
             await bus.Publish(@event, stoppingToken);
             await Task.Delay(3000, stoppingToken);
 
-            PaymentCompletedEvent @event2 = new()
+            PaymentCompletedEvent @event2 = new(orderId)
             {
-                OrderId = orderId,
-                EventType = "PaymentCompleted",
                 Timestamp = DateTime.UtcNow,
                 IsCompleted = true,
                 PaymentId = Guid.NewGuid()

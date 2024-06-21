@@ -19,7 +19,7 @@ namespace OrderService.Consumers
         public async Task Consume(ConsumeContext<PlaceOrderEvent> context)
         {
             Console.WriteLine("Sending request to place order...");
-            await _orderPublisher.PlaceOrder(context.Message.Order);
+            await _orderPublisher.PlaceOrder(context.Message);
         }
     }
 }

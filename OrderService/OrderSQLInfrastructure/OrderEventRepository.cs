@@ -22,7 +22,6 @@ namespace OrderSQLInfrastructure
         public void SaveOrderEvent<T>(T eventBase) where T : OrderBaseEvent
         {
             eventBase.Id = Guid.NewGuid();
-            eventBase.EventType = eventBase.GetType().Name;
             eventBase.Timestamp = DateTime.UtcNow;
             eventBase.EventData = JsonConvert.SerializeObject(eventBase);
 
@@ -47,7 +46,7 @@ namespace OrderSQLInfrastructure
                     return JsonConvert.DeserializeObject<OrderReadyForShippingEvent>(json);
                 case "PaymentCompletedEvent":
                     return JsonConvert.DeserializeObject<PaymentCompletedEvent>(json);
-                case "OrderCancelledEvent":
+                case "PlaceOrderEvent":
                     return JsonConvert.DeserializeObject<PlaceOrderEvent>(json);
                 default:
                     throw new Exception("Unknown event type");

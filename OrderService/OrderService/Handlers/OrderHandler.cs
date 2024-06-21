@@ -15,20 +15,23 @@ namespace OrderService.Handlers
             _orderRepository = orderRepository;
         }
 
-        public async Task PlaceOrder(Order order)
+        public async Task PlaceOrder(PlaceOrderEvent @event)
         {
+            _orderRepository.SaveOrderEvent(@event);
+
             // Order was placed, store event and publish to event bus
-            var orderPlacedEvent = new OrderPlacedEvent()
+            var orderPlacedEvent = new OrderPlacedEvent(@event.OrderId)
             {
-                OrderId = order.Id,
                 Timestamp = DateTime.UtcNow,
             };
             _orderRepository.SaveOrderEvent(orderPlacedEvent);
             await _bus.Publish(orderPlacedEvent);
         }
-
-        public async Task ManageOrder(PaymentCompletedEvent paymentCompletedEvent)
+        
+        public async Task ManageOrder(PaymentCompletedEvent @event)
         {
+            _orderRepository.SaveOrderEvent(@event);
+            
             // Item picking & Order packaging
             // TODO: Remove dummy data
             List<ItemRef> itemRefs = new()
@@ -42,9 +45,8 @@ namespace OrderService.Handlers
                     Amount = 1
                 }
             };
-            var orderPackagedEvent = new OrderPackagedEvent()
+            var orderPackagedEvent = new OrderPackagedEvent(@event.OrderId)
             {
-                OrderId = paymentCompletedEvent.OrderId,
                 Items = itemRefs
             };
             _orderRepository.SaveOrderEvent(orderPackagedEvent);
@@ -52,9 +54,9 @@ namespace OrderService.Handlers
             // Logistics selection
 
             await _bus.Publish(
-                new OrderReadyForShippingEvent()
+                new OrderReadyForShippingEvent(@event.OrderId)
                 {
-                    OrderId = paymentCompletedEvent.OrderId,
+                    Timestamp = DateTime.UtcNow,
                 });
         }
     }

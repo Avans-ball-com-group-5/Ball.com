@@ -9,5 +9,8 @@ namespace OrderDomain.Events
 {
     public class OrderReadyForShippingEvent : OrderBaseEvent
     {
+        public OrderReadyForShippingEvent(Guid orderId) : base(orderId)
+        {
+        }
     }
 }
