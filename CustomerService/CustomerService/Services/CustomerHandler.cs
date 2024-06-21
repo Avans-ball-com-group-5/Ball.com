@@ -12,14 +12,14 @@ namespace CustomerService.Services
             Bus = bus;
         }
 
-        public async Task RegisterCustomerService(RegisterCustomerService registerEvent)
+        public async Task RegisterCustomerService(RegisterCustomerServiceTicket registerEvent)
         {
             // Do something with the ticket info, like saving it to a database or sending it to another service
             // For now, we'll just publish the created event
             Console.WriteLine("Registering customer service...");
 
             await Bus.Publish(
-                new CustomerServiceRegistered(
+                new CustomerServiceTicketRegistered(
                     registerEvent.CustomerId,
                     registerEvent.Name,
                     registerEvent.Email,

@@ -4,15 +4,15 @@ using MassTransit;
 
 namespace CustomerService.Messaging
 {
-    public class RegisterCustomerServiceConsumer : IConsumer<RegisterCustomerService>
+    public class RegisterCustomerServiceTicketConsumer : IConsumer<RegisterCustomerServiceTicket>
     {
         private readonly CustomerHandler _customerHandler;
-        public RegisterCustomerServiceConsumer(CustomerHandler customerHandler)
+        public RegisterCustomerServiceTicketConsumer(CustomerHandler customerHandler)
         {
             _customerHandler = customerHandler;
         }
 
-        public async Task Consume(ConsumeContext<RegisterCustomerService> context)
+        public async Task Consume(ConsumeContext<RegisterCustomerServiceTicket> context)
         {
             await _customerHandler.RegisterCustomerService(context.Message);
         }

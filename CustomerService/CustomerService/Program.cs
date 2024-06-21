@@ -27,6 +27,7 @@ namespace CustomerService
         private static IServiceCollection ConfigureHandlers(this IServiceCollection services)
         {
             services.AddScoped<CustomerHandler>();
+
             // This adds a service that will run in the background and send messages to the bus every 30 seconds for testing purposes
             services.AddHostedService<BusSenderBackgroundService>();
 
@@ -45,6 +46,7 @@ namespace CustomerService
                 // This configures rabbitmq, should be environment variables later on.
                 x.UsingRabbitMq((context, cfg) =>
                 {
+                    cfg.UseDelayedRedelivery(r => r.Interval(5, TimeSpan.FromSeconds(30)));
                     cfg.UseNewtonsoftJsonSerializer();
                     cfg.UseNewtonsoftJsonDeserializer();
                     cfg.Host("amqp://guest:guest@rabbitmq");
@@ -59,7 +61,7 @@ namespace CustomerService
         private static void ConfigureBusEndpoints(IBusRegistrationConfigurator configurator)
         {
             // Add all consumers here for DI. This will allow the consumers to be resolved by the DI container
-            configurator.AddConsumer<RegisterCustomerServiceConsumer, RegisterCustomerServiceConsumerDefinition>();
+            configurator.AddConsumer<RegisterCustomerServiceTicketConsumer, RegisterCustomerServiceTicketConsumerDefinition>();
         }
     }
 }

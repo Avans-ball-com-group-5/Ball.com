@@ -17,7 +17,7 @@ namespace CustomerService
         {
             do
             {
-                await bus.Publish(new RegisterCustomerService(Guid.NewGuid(), "John Doe", "email", "phone", "message"));
+                await bus.Publish(new RegisterCustomerServiceTicket(Guid.NewGuid(), "John Doe", "email", "phone", "message"));
                 await Task.Delay(30000, stoppingToken);
             } while (true);
         }

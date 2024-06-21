@@ -5,7 +5,7 @@
       "commandVersion": "1.0",
       "serviceActions": {
         "customerservice": "StartDebugging",
-        "rabbitmq": "StartWithoutDebugging"
+        "rabbitmq": "StartDebugging"
       }
     }
   }
