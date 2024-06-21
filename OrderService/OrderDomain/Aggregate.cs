@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
@@ -25,6 +26,11 @@ namespace OrderDomain
         public void Apply(OrderPackagedEvent @event)
         {
             Items = @event.Items;
+        }
+
+        public override string ToString()
+        {
+            return $"Id: {Id}, CreatedAt: {CreatedAt}, PaymentId: {PaymentId}, Items: {string.Join(", ", Items.Select(i => $"{{ Id: {i.Id}, Amount: {i.Amount} }}"))}";
         }
     }
 

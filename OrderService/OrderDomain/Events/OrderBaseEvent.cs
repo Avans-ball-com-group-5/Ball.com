@@ -1,8 +1,8 @@
 ﻿namespace OrderDomain.Events
 {
-    public abstract class OrderBaseEvent
+    public class OrderBaseEvent
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public Guid OrderId { get; set; }
         public string EventType { get; set; }
         public DateTime Timestamp { get; set; }

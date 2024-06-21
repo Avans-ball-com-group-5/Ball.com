@@ -1,19 +1,6 @@
 version: "3.8"
 
 services:
-    # customerservice:
-    #     build:
-    #         context: ./CustomerService/CustomerService
-    #         dockerfile: Dockerfile
-    #     ports:
-    #         - "5001:80"
-    #     depends_on:
-    #         - customersql
-    #         - rabbitmq
-    #     environment:
-    #         - ConnectionStrings__CustomerDbContext=Server=customersql;Database=CustomerDB;User=sa;Password=Your_password123;TrustServerCertificate=True
-    #         - RabbitMQ__HostName=rabbitmq
-
     orderservice:
         build:
             context: ./OrderService
@@ -27,27 +14,6 @@ services:
             - ConnectionStrings__OrderDbContext=Server=ordersql;Database=OrderDB;User=sa;Password=Your_password123;TrustServerCertificate=True
             - RabbitMQ__HostName=rabbitmq
 
-    # paymentservice:
-    #     build:
-    #         context: ./PaymentService/PaymentService
-    #         dockerfile: Dockerfile
-    #     ports:
-    #         - "5003:80"
-    #     depends_on:
-    #         - paymentsql
-    #         - rabbitmq
-    #     environment:
-    #         - ConnectionStrings__PaymentDbContext=Server=paymentsql;Database=PaymentDB;User=sa;Password=Your_password123;TrustServerCertificate=True
-    #         - RabbitMQ__HostName=rabbitmq
-
-    # customersql:
-    #     image: mcr.microsoft.com/mssql/server:2019-latest
-    #     environment:
-    #         SA_PASSWORD: "Your_password123"
-    #         ACCEPT_EULA: "Y"
-    #     ports:
-    #         - "1434:1433"
-
     ordersql:
         image: mcr.microsoft.com/mssql/server:2019-latest
         environment:
@@ -55,14 +21,6 @@ services:
             ACCEPT_EULA: "Y"
         ports:
             - "1435:1433"
-
-    # paymentsql:
-    #     image: mcr.microsoft.com/mssql/server:2019-latest
-    #     environment:
-    #         SA_PASSWORD: "Your_password123"
-    #         ACCEPT_EULA: "Y"
-    #     ports:
-    #         - "1436:1433"
 
     rabbitmq:
         image: rabbitmq:3-management

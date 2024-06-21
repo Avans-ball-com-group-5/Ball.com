@@ -44,6 +44,7 @@ namespace OrderService.Handlers
             };
             var orderPackagedEvent = new OrderPackagedEvent()
             {
+                OrderId = paymentCompletedEvent.OrderId,
                 Items = itemRefs
             };
             _orderRepository.SaveOrderEvent(orderPackagedEvent);

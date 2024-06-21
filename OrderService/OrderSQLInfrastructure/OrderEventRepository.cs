@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using OrderDomain;
 using OrderDomain.Events;
 using OrderDomain.Services;
@@ -28,14 +30,37 @@ namespace OrderSQLInfrastructure
             _context.SaveChanges();
         }
 
-        private List<object> GetEventsForAggregate(Guid aggregateId)
+        private static OrderBaseEvent ConvertJsonToOrderBaseObject(string json)
+        {
+            // convert json to object
+            var @object = JsonConvert.DeserializeObject(json);
+            // convert to correct derived OrderBaseEvent class
+            var jObject = JObject.FromObject(@object);
+            var eventType = jObject["EventType"].ToString();
+            switch (eventType)
+            {
+                case "OrderPlacedEvent":
+                    return JsonConvert.DeserializeObject<OrderPlacedEvent>(json);
+                case "OrderPackagedEvent":
+                    return JsonConvert.DeserializeObject<OrderPackagedEvent>(json);
+                case "OrderReadyForShippingEvent":
+                    return JsonConvert.DeserializeObject<OrderReadyForShippingEvent>(json);
+                case "PaymentCompletedEvent":
+                    return JsonConvert.DeserializeObject<PaymentCompletedEvent>(json);
+                case "OrderCancelledEvent":
+                    return JsonConvert.DeserializeObject<PlaceOrderEvent>(json);
+                default:
+                    throw new Exception("Unknown event type");
+            }
+        }
+
+        private List<OrderBaseEvent> GetEventsForAggregate(Guid aggregateId)
         {
             var events = _context.Events
                 .Where(e => e.OrderId == aggregateId)
                 .OrderBy(e => e.Id)
-                .Select(e => JsonConvert.DeserializeObject(e.EventData, Type.GetType(e.EventType))).ToList()
+                .Select(e => ConvertJsonToOrderBaseObject(e.EventData))
                 .ToList();
-
             return events;
         }
 

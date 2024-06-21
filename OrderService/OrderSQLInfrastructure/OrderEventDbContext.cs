@@ -7,6 +7,10 @@ namespace OrderSQLInfrastructure
     public class OrderEventDbContext : DbContext
     {
         public DbSet<OrderBaseEvent> Events { get; set; }
+        public OrderEventDbContext(DbContextOptions<OrderEventDbContext> options) : base(options)
+        {
+            
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<OrderBaseEvent>().ToTable("Events");
@@ -18,7 +22,7 @@ namespace OrderSQLInfrastructure
             .IsRequired();
             modelBuilder.Entity<OrderBaseEvent>()
             .Property(e => e.EventData)
-            .HasColumnType("json"); // For PostgreSQL; use "json" for other databases
+            .HasColumnType("nvarchar(max)"); // For PostgreSQL; use "json" for other databases
         }
     }
 }

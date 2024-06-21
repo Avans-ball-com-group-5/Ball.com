@@ -5,6 +5,8 @@ using OrderService.Consumers;
 using OrderService.Handlers;
 using OrderSQLInfrastructure;
 using Microsoft.EntityFrameworkCore;
+using OrderService.Services;
+using OrderDomain.Services;
 
 namespace OrderService
 {
@@ -13,7 +15,6 @@ namespace OrderService
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
-            Console.WriteLine("Hello World!");
         }
 
         // This method is used to configure the host and services that the application will use, including consumers(endpoints)
@@ -29,10 +30,12 @@ namespace OrderService
         private static IServiceCollection ConfigureHandlers(this IServiceCollection services)
         {
             services.AddScoped<OrderHandler>();
+            services.AddScoped<IOrderRepository, OrderEventRepository>();
             // This adds a service that will run in the background and send messages to the bus every 30 seconds for testing purposes
             //services.AddHostedService<BusSenderBackgroundService>();
             services.AddDbContext<OrderEventDbContext>(options =>
-                options.UseSqlServer("Server=ordersql;Database=OrderDB;User=sa;Password=Your_password123;TrustServerCertificate=True", c => c.MigrationsAssembly("OrderSQLInfrastructure")), ServiceLifetime.Singleton);
+                options.UseSqlServer("Server=localhost,1435;Database=YourDatabaseName;User Id=sa;Password=Your_password123;TrustServerCertificate=True", c => c.MigrationsAssembly("OrderSQLInfrastructure")), ServiceLifetime.Scoped);
+            services.AddHostedService<BusSenderBackgroundService>();
             return services;
         }
 
@@ -66,6 +69,7 @@ namespace OrderService
         private static void ConfigureBusEndpoints(IBusRegistrationConfigurator configurator)
         {
             // Add all consumers here for DI. This will allow the consumers to be resolved by the DI container
+            configurator.AddConsumer<PlaceOrderConsumer, PlaceOrderConsumerDefinition>();
             configurator.AddConsumer<PaymentCompletedConsumer, PaymentCompletedConsumerDefinition>();
         }
     }
