@@ -11,14 +11,14 @@ services:
             - rabbitmq
         environment:
             - ASPNETCORE_ENVIRONMENT=Development # Optionally set environment
-            - ConnectionStrings__OrderDbContext=${ConnectionStrings__OrderDbContext}
-            - RabbitMQ__HostName=${RabbitMQ__HostName}
+            - ConnectionStrings__OrderDbContext=Server=ordersql,1433;Database=OrderDB;User=sa;Password=Your_password123;TrustServerCertificate=True
+            - RabbitMQ__HostName=rabbitmq
 
     ordersql:
         container_name: ordersql
         image: mcr.microsoft.com/mssql/server:2019-latest
         environment:
-            SA_PASSWORD: ${SA_PASSWORD}
+            SA_PASSWORD: Your_password123
             ACCEPT_EULA: "Y"
         ports:
             - "1435:1433"
