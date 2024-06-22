@@ -1,28 +1,30 @@
-version: "3.8"
-
 services:
     orderservice:
         build:
             context: ./OrderService
             dockerfile: OrderService/Dockerfile
+        container_name: orderservice
         ports:
             - "5002:80"
         depends_on:
             - ordersql
             - rabbitmq
         environment:
-            - ConnectionStrings__OrderDbContext=Server=ordersql;Database=OrderDB;User=sa;Password=Your_password123;TrustServerCertificate=True
-            - RabbitMQ__HostName=rabbitmq
+            - ASPNETCORE_ENVIRONMENT=Development # Optionally set environment
+            - ConnectionStrings__OrderDbContext=${ConnectionStrings__OrderDbContext}
+            - RabbitMQ__HostName=${RabbitMQ__HostName}
 
     ordersql:
+        container_name: ordersql
         image: mcr.microsoft.com/mssql/server:2019-latest
         environment:
-            SA_PASSWORD: "Your_password123"
+            SA_PASSWORD: ${SA_PASSWORD}
             ACCEPT_EULA: "Y"
         ports:
             - "1435:1433"
 
     rabbitmq:
+        container_name: rabbitmq
         image: rabbitmq:3-management
         ports:
             - "15672:15672" # RabbitMQ Management Console

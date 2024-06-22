@@ -7,6 +7,8 @@ using OrderSQLInfrastructure;
 using Microsoft.EntityFrameworkCore;
 using OrderService.Services;
 using OrderDomain.Services;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json.Linq;
 
 namespace OrderService
 {
@@ -14,33 +16,43 @@ namespace OrderService
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            var host = CreateHostBuilder(args).Build();
+            // Run database migration before starting the application
+            MigrateDatabase(host);
+            host.Run();
         }
 
         // This method is used to configure the host and services that the application will use, including consumers(endpoints)
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    config.AddEnvironmentVariables();
+                })
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddMassTransitServices(ConfigureBusEndpoints);
-                    services.ConfigureHandlers();
+                    services.AddMassTransitServices(hostContext.Configuration, ConfigureBusEndpoints);
+                    services.ConfigureHandlers(hostContext.Configuration);
                 });
 
         // This method is used to configure the handlers that the application will use through DI
-        private static IServiceCollection ConfigureHandlers(this IServiceCollection services)
+        private static IServiceCollection ConfigureHandlers(this IServiceCollection services, IConfiguration configuration)
         {
+            var connectionString = configuration.GetConnectionString("OrderDbContext");
+            Console.WriteLine(connectionString);
+            services.AddDbContext<OrderEventDbContext>(options =>
+                options.UseSqlServer(connectionString, c => c.MigrationsAssembly("OrderSQLInfrastructure")), ServiceLifetime.Scoped);
+            Console.WriteLine("SQL Server injection worked");
+
             services.AddScoped<OrderHandler>();
             services.AddScoped<IOrderRepository, OrderEventRepository>();
-            // This adds a service that will run in the background and send messages to the bus every 30 seconds for testing purposes
-            //services.AddHostedService<BusSenderBackgroundService>();
-            services.AddDbContext<OrderEventDbContext>(options =>
-                options.UseSqlServer("Server=localhost,1435;Database=YourDatabaseName;User Id=sa;Password=Your_password123;TrustServerCertificate=True", c => c.MigrationsAssembly("OrderSQLInfrastructure")), ServiceLifetime.Scoped);
-            services.AddHostedService<BusSenderBackgroundService>();
             return services;
         }
 
-        private static IServiceCollection AddMassTransitServices(this IServiceCollection services, Action<IBusRegistrationConfigurator> busConfigure)
+        private static IServiceCollection AddMassTransitServices(this IServiceCollection services, IConfiguration configuration, Action<IBusRegistrationConfigurator> busConfigure)
         {
+            var rabbitMQHostName = configuration["RabbitMQ:HostName"]; // Read from configuration
+            Console.WriteLine("rabbit hostname: " + rabbitMQHostName);
             services.AddMassTransit(x =>
             {
                 // Default settings
@@ -53,7 +65,8 @@ namespace OrderService
                 {
                     cfg.UseNewtonsoftJsonSerializer();
                     cfg.UseNewtonsoftJsonDeserializer();
-                    cfg.Host("localhost", "/", h =>
+
+                    cfg.Host(rabbitMQHostName, "/", h =>
                     {
                         h.Username("guest");
                         h.Password("guest");
@@ -71,6 +84,25 @@ namespace OrderService
             // Add all consumers here for DI. This will allow the consumers to be resolved by the DI container
             configurator.AddConsumer<PlaceOrderConsumer, PlaceOrderConsumerDefinition>();
             configurator.AddConsumer<PaymentCompletedConsumer, PaymentCompletedConsumerDefinition>();
+        }
+
+        // Method to perform database migration
+        private static void MigrateDatabase(IHost host)
+        {
+            Console.WriteLine("Starting migration");
+            using var scope = host.Services.CreateScope();
+            var services = scope.ServiceProvider;
+
+            try
+            {
+                var dbContext = services.GetRequiredService<OrderEventDbContext>();
+                dbContext.Database.Migrate();
+                Console.WriteLine("Database migration successful.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while migrating the database: {ex.Message}");
+            }
         }
     }
 }

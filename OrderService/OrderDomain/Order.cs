@@ -15,6 +15,9 @@ namespace OrderDomain
         public DateTime CreatedAt { get; set; }
         public Guid PaymentId { get; set; }
         public List<ItemRef> Items { get; set; } = new();
+        public void Apply(PlaceOrderEvent @event)
+        {
+        }
         public void Apply(OrderPlacedEvent @event)
         {
             CreatedAt = @event.Timestamp;

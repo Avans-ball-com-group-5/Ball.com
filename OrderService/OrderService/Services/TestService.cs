@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace OrderService.Services
 {
-    public class BusSenderBackgroundService : BackgroundService
+    public class TestService : BackgroundService
     {
         private readonly IBus bus;
         private readonly IOrderRepository repository;
 
-        public BusSenderBackgroundService(IBus bus, IOrderRepository repository)
+        public TestService(IBus bus, IOrderRepository repository)
         {
             this.bus = bus;
             this.repository = repository;
@@ -46,6 +46,7 @@ namespace OrderService.Services
             };
             Console.WriteLine("Sending PaymentCompletedEvent to bus...");
             await bus.Publish(@event2, stoppingToken);
+            await Task.Delay(3000, stoppingToken);
 
             Order order = repository.GetOrderById(orderId);
             Console.WriteLine($"Aggregate of order events: {order}");
