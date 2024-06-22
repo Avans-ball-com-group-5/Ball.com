@@ -10,7 +10,6 @@ services:
             - ordersql
             - rabbitmq
         environment:
-            - ASPNETCORE_ENVIRONMENT=Development # Optionally set environment
             - ConnectionStrings__OrderDbContext=Server=ordersql,1433;Database=OrderDB;User=sa;Password=Your_password123;TrustServerCertificate=True
             - RabbitMQ__HostName=rabbitmq
 
