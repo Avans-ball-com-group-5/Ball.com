@@ -12,5 +12,7 @@ namespace OrderDomain.Events
         public OrderReadyForShippingEvent(Guid orderId) : base(orderId)
         {
         }
+        [JsonPropertyName("order")]
+        public Order Order { get; set; } = new();
     }
 }

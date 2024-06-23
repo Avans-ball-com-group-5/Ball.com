@@ -22,7 +22,7 @@ namespace OrderDomain
         {
             CreatedAt = @event.Timestamp;
         }
-        public void Apply(PaymentCompletedEvent @event)
+        public void Apply(PaymentCreatedEvent @event)
         {
             PaymentId = @event.PaymentId;
         }

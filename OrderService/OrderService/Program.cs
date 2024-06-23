@@ -27,6 +27,7 @@ namespace OrderService
             Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
+                    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
                     config.AddEnvironmentVariables();
                 })
                 .ConfigureServices((hostContext, services) =>
@@ -39,6 +40,7 @@ namespace OrderService
         private static IServiceCollection ConfigureHandlers(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("OrderDbContext");
+            connectionString ??= "Server=localhost,1435;Database=OrderDB;User=sa;Password=Your_password123;TrustServerCertificate=True";
             Console.WriteLine(connectionString);
             services.AddDbContext<OrderEventDbContext>(options =>
                 options.UseSqlServer(connectionString, c => c.MigrationsAssembly("OrderSQLInfrastructure")), ServiceLifetime.Scoped);
@@ -46,12 +48,15 @@ namespace OrderService
 
             services.AddScoped<OrderHandler>();
             services.AddScoped<IOrderRepository, OrderEventRepository>();
+            services.AddHostedService<TestService>();
+
             return services;
         }
 
         private static IServiceCollection AddMassTransitServices(this IServiceCollection services, IConfiguration configuration, Action<IBusRegistrationConfigurator> busConfigure)
         {
-            var rabbitMQHostName = configuration["RabbitMQ:HostName"]; // Read from configuration
+            var rabbitMQHostName = configuration["RabbitMQ:HostName"];
+            rabbitMQHostName ??= "localhost";
             Console.WriteLine("rabbit hostname: " + rabbitMQHostName);
             services.AddMassTransit(x =>
             {
@@ -83,7 +88,7 @@ namespace OrderService
         {
             // Add all consumers here for DI. This will allow the consumers to be resolved by the DI container
             configurator.AddConsumer<PlaceOrderConsumer, PlaceOrderConsumerDefinition>();
-            configurator.AddConsumer<PaymentCompletedConsumer, PaymentCompletedConsumerDefinition>();
+            configurator.AddConsumer<PaymentCreatedConsumer, PaymentCreatedConsumerDefinition>();
         }
 
         // Method to perform database migration

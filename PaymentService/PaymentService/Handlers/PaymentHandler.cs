@@ -39,7 +39,7 @@ namespace PaymentService.Handlers
             }
         }
 
-        public async Task HandleAfterPayCompletedEvent(AfterPayCompletedEvent message)
+        public async Task HandleAfterPayCompletedEvent(PayAfterPayRequest message)
         {
             // Update db entity to completed
             // Get orderId from db entity

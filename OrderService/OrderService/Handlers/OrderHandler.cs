@@ -28,7 +28,7 @@ namespace OrderService.Handlers
             await _bus.Publish(orderPlacedEvent);
         }
         
-        public async Task ManageOrder(PaymentCompletedEvent @event)
+        public async Task ManageOrder(PaymentCreatedEvent @event)
         {
             _orderRepository.SaveOrderEvent(@event);
             
@@ -51,12 +51,13 @@ namespace OrderService.Handlers
             };
             _orderRepository.SaveOrderEvent(orderPackagedEvent);
 
-            // Logistics selection
+            var aggregate = _orderRepository.GetOrderById(orderPackagedEvent.OrderId);
 
             await _bus.Publish(
                 new OrderReadyForShippingEvent(@event.OrderId)
                 {
                     Timestamp = DateTime.UtcNow,
+                    Order = aggregate
                 });
         }
     }

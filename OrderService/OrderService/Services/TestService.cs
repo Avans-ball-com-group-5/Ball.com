@@ -36,20 +36,20 @@ namespace OrderService.Services
             };
             Console.WriteLine("Sending PlaceOrderEvent to bus...");
             await bus.Publish(@event, stoppingToken);
-            await Task.Delay(3000, stoppingToken);
+            // await Task.Delay(3000, stoppingToken);
 
-            PaymentCompletedEvent @event2 = new(orderId)
-            {
-                Timestamp = DateTime.UtcNow,
-                IsCompleted = true,
-                PaymentId = Guid.NewGuid()
-            };
-            Console.WriteLine("Sending PaymentCompletedEvent to bus...");
-            await bus.Publish(@event2, stoppingToken);
-            await Task.Delay(3000, stoppingToken);
+            // PaymentCompletedEvent @event2 = new(orderId)
+            // {
+            //     Timestamp = DateTime.UtcNow,
+            //     IsCompleted = true,
+            //     PaymentId = Guid.NewGuid()
+            // };
+            // Console.WriteLine("Sending PaymentCompletedEvent to bus...");
+            // await bus.Publish(@event2, stoppingToken);
+            // await Task.Delay(3000, stoppingToken);
 
-            Order order = repository.GetOrderById(orderId);
-            Console.WriteLine($"Aggregate of order events: {order}");
+            // Order order = repository.GetOrderById(orderId);
+            // Console.WriteLine($"Aggregate of order events: {order}");
         }
     }
 }

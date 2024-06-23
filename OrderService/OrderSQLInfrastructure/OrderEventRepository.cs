@@ -44,8 +44,8 @@ namespace OrderSQLInfrastructure
                     return JsonConvert.DeserializeObject<OrderPackagedEvent>(json);
                 case "OrderReadyForShippingEvent":
                     return JsonConvert.DeserializeObject<OrderReadyForShippingEvent>(json);
-                case "PaymentCompletedEvent":
-                    return JsonConvert.DeserializeObject<PaymentCompletedEvent>(json);
+                case "PaymentCreatedEvent":
+                    return JsonConvert.DeserializeObject<PaymentCreatedEvent>(json);
                 case "PlaceOrderEvent":
                     return JsonConvert.DeserializeObject<PlaceOrderEvent>(json);
                 default:

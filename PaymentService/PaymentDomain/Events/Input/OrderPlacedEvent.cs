@@ -10,6 +10,8 @@ namespace PaymentDomain.Events.Input
             OrderId = orderId;
             IsAfterPay = isAfterPay;
         }
+        [JsonPropertyName("id")]
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         [JsonPropertyName("orderId")]
         public Guid OrderId { get; set; }

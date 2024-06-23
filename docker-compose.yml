@@ -1,4 +1,16 @@
 services:
+    paymentservice:
+        build:
+            context: ./PaymentService
+            dockerfile: PaymentService/Dockerfile
+        container_name: paymentservice
+        ports:
+            - "5001:80"
+        depends_on:
+            - rabbitmq
+        environment:
+            - RabbitMQ__HostName=rabbitmq
+
     orderservice:
         build:
             context: ./OrderService

@@ -3,9 +3,9 @@
 namespace OrderDomain.Events
 {
     [Serializable]
-    public class PaymentCompletedEvent : OrderBaseEvent
+    public class PaymentCreatedEvent : OrderBaseEvent
     {
-        public PaymentCompletedEvent(Guid orderId) : base(orderId)
+        public PaymentCreatedEvent(Guid orderId) : base(orderId)
         {
         }
 

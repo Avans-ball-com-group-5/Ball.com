@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentService", "PaymentService\PaymentService.csproj", "{02FD02EF-D8F0-44E1-8770-EE3DE1CB31A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentService", "PaymentService\PaymentService.csproj", "{02FD02EF-D8F0-44E1-8770-EE3DE1CB31A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentDomain", "PaymentDomain\PaymentDomain.csproj", "{3D243653-9DC0-4646-97A9-A518EE7C0F2D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentDomain", "PaymentDomain\PaymentDomain.csproj", "{3D243653-9DC0-4646-97A9-A518EE7C0F2D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
