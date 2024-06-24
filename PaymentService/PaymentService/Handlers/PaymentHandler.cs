@@ -1,7 +1,5 @@
 ﻿using Domain.Events;
 using MassTransit;
-using PaymentDomain.Events;
-using PaymentDomain.Events.Output;
 
 namespace PaymentService.Handlers
 {

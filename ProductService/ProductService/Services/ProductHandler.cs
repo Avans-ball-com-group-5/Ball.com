@@ -1,6 +1,4 @@
-﻿using MassTransit;
-using ProductDomain.Events.Input;
-using ProductDomain.Events.Output;
+﻿using Domain.Events;
 
 namespace ProductService.Services
 {

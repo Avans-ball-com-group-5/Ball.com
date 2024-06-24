@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 using Microsoft.Extensions.Hosting;
-using ProductDomain.Events.Input;
+using Domain.Events;
 
 
 namespace ProductService

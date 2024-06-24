@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PaymentService.Consumers;
 using PaymentService.Handlers;
-using System.Xml.Xsl;
 
 namespace PaymentService
 {

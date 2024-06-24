@@ -1,5 +1,5 @@
 ﻿using CustomerService.Services;
-using CustomerDomain.Events.Input;
+using Domain.Events;
 using MassTransit;
 
 namespace CustomerService.Messaging

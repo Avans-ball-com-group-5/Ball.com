@@ -2,12 +2,6 @@
 using Domain.Services;
 using MassTransit;
 using Microsoft.Extensions.Hosting;
-using OrderDomain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OrderService.Services
 {

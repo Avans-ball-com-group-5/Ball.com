@@ -1,12 +1,6 @@
 ﻿using Domain.Events;
-using LogisticsDomain.Events.Input;
 using LogisticsService.Handlers;
 using MassTransit;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LogisticsService.Consumers
 {

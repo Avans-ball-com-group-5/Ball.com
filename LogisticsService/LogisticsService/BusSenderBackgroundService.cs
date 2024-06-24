@@ -1,5 +1,5 @@
-﻿using LogisticsDomain.Events.Input;
-using LogisticsDomain.Models;
+﻿using Domain.Events;
+using Domain.Models;
 using MassTransit;
 using Microsoft.Extensions.Hosting;
 

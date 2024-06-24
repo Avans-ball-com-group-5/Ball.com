@@ -2,7 +2,6 @@
 using Domain.Events;
 using Domain.Services;
 using MassTransit;
-using OrderDomain.Events;
 
 namespace OrderService.Handlers
 {

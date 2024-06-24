@@ -1,7 +1,5 @@
-﻿
-using MassTransit;
-using ProductDomain.Events.Input;
-using ProductService.Services;
+﻿using ProductService.Services;
+using Domain.Events;
 
 namespace ProductService.Messaging
 {
