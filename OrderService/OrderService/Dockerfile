@@ -4,7 +4,7 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["OrderService/OrderService.csproj", "OrderService/"]
-COPY ["OrderDomain/OrderDomain.csproj", "OrderDomain/"]
+COPY ["Domain/Domain.csproj", "Domain/"]
 COPY ["OrderSQLInfrastructure/OrderSQLInfrastructure.csproj", "OrderSQLInfrastructure/"]
 RUN dotnet restore "OrderService/OrderService.csproj"
 COPY . .

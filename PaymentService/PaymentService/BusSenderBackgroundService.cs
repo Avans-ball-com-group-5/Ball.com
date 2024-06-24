@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 using Microsoft.Extensions.Hosting;
-using PaymentDomain.Events.Input;
+using Domain.Events;
 
 namespace PaymentService
 {

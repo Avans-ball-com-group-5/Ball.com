@@ -6,7 +6,7 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["PaymentService/PaymentService.csproj", "PaymentService/"]
-COPY ["PaymentDomain/PaymentDomain.csproj", "PaymentDomain/"]
+COPY ["Domain/Domain.csproj", "Domain/"]
 RUN dotnet restore "PaymentService/PaymentService.csproj"
 COPY . .
 WORKDIR "/src/PaymentService"
