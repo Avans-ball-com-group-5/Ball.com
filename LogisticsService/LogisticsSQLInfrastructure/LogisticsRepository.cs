@@ -1,4 +1,4 @@
-﻿using LogisticsDomain;
+﻿using LogisticsDomain.Models;
 using LogisticsDomain.Services;
 using System;
 using System.Collections.Generic;
@@ -19,7 +19,7 @@ namespace LogisticsSQLInfrastructure
 
         public LogisticsCompany GetCheapestLogisticsCompany()
         {
-            return _context.LogisticsCompanies.MinBy(x => x.PricePerKm);
+            return _context.LogisticsCompanies.OrderBy(x => x.PricePerKm).FirstOrDefault();
         }
 
         public LogisticsCompany GetLogisticsCompanyById(Guid id)

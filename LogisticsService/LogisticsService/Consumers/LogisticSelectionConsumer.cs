@@ -1,4 +1,5 @@
 ﻿using LogisticsDomain.Events.Input;
+using LogisticsDomain.Events.Output;
 using LogisticsService.Handlers;
 using MassTransit;
 using System;
@@ -9,17 +10,18 @@ using System.Threading.Tasks;
 
 namespace LogisticsService.Consumers
 {
-    public class OrderReadyForShippingConsumer : IConsumer<OrderReadyForShippingEvent>
+    public class LogisticSelectionConsumer : IConsumer<LogisticSelectionEvent>
     {
         private readonly LogisticsHandler _logisticsHandler;
-        public OrderReadyForShippingConsumer(LogisticsHandler logisticsHandler)
+
+        public LogisticSelectionConsumer(LogisticsHandler logisticsHandler)
         {
             _logisticsHandler = logisticsHandler;
         }
 
-        public async Task Consume(ConsumeContext<OrderReadyForShippingEvent> context)
+        public async Task Consume(ConsumeContext<LogisticSelectionEvent> context)
         {
-            await _logisticsHandler.ManageLogistics(context.Message);
+            await _logisticsHandler.ShipOrder(context.Message);
         }
     }
 }

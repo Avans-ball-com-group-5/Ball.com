@@ -33,7 +33,9 @@ namespace LogisticsService
             // This adds a service that will run in the background and send messages to the bus every 30 seconds for testing purposes
             // TODO: Change server accordingly
             services.AddDbContext<LogisticsDbContext>(options =>
-                options.UseSqlServer("Server=localhost,1435;Database=YourDatabaseName;User Id=sa;Password=Your_password123;TrustServerCertificate=True", c => c.MigrationsAssembly("OrderSQLInfrastructure")), ServiceLifetime.Scoped);
+                        options.UseSqlServer("Server=localhost,1433;Database=YourDatabaseName;User Id=sa;Password=Your_password123;TrustServerCertificate=True",
+                        c => c.MigrationsAssembly("LogisticsSQLInfrastructure")),ServiceLifetime.Scoped);
+
             services.AddHostedService<BusSenderBackgroundService>();
 
             return services;
@@ -58,6 +60,7 @@ namespace LogisticsService
                         h.Username("guest");
                         h.Password("guest");
                     });
+
                     cfg.ConfigureEndpoints(context);
                 });
             });
@@ -69,6 +72,7 @@ namespace LogisticsService
         {
             // Add all consumers here for DI. This will allow the consumers to be resolved by the DI container
             configurator.AddConsumer<OrderReadyForShippingConsumer, OrderReadyForShippingDefinition>();
+            configurator.AddConsumer<LogisticSelectionConsumer, LogisticSelectionDefinition>();
         }
     }
 }

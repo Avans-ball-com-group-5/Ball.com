@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LogisticsDomain
+namespace LogisticsDomain.Models
 {
-    public class Warehouse
+    public class LogisticsCompany
     {
         public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Location { get; set; } = string.Empty;
+        public decimal PricePerKm { get; set; }
+        public string Website { get; set; } = string.Empty;
     }
 }
