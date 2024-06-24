@@ -1,8 +1,10 @@
 ﻿using MassTransit;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PaymentService.Consumers;
 using PaymentService.Handlers;
+using System.Xml.Xsl;
 
 namespace PaymentService
 {
@@ -18,7 +20,7 @@ namespace PaymentService
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddMassTransitServices(ConfigureBusEndpoints);
+                    services.AddMassTransitServices(hostContext.Configuration, ConfigureBusEndpoints);
                     services.ConfigureHandlers();
                 });
 
@@ -27,13 +29,15 @@ namespace PaymentService
         {
             services.AddScoped<PaymentHandler>();
             // This adds a service that will run in the background and send messages to the bus every 30 seconds for testing purposes
-            //services.AddHostedService<BusSenderBackgroundService>();
+            // services.AddHostedService<BusSenderBackgroundService>();
 
             return services;
         }
 
-        private static IServiceCollection AddMassTransitServices(this IServiceCollection services, Action<IBusRegistrationConfigurator> busConfigure)
+        private static IServiceCollection AddMassTransitServices(this IServiceCollection services, IConfiguration configuration, Action<IBusRegistrationConfigurator> busConfigure)
         {
+            var rabbitMQHostName = configuration["RabbitMQ:HostName"];
+            rabbitMQHostName ??= "localhost";
             services.AddMassTransit(x =>
             {
                 // Default settings
@@ -46,7 +50,8 @@ namespace PaymentService
                 {
                     cfg.UseNewtonsoftJsonSerializer();
                     cfg.UseNewtonsoftJsonDeserializer();
-                    cfg.Host("localhost", "/", h =>
+
+                    cfg.Host(rabbitMQHostName, "/", h =>
                     {
                         h.Username("guest");
                         h.Password("guest");
