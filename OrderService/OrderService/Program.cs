@@ -6,9 +6,9 @@ using OrderService.Handlers;
 using OrderSQLInfrastructure;
 using Microsoft.EntityFrameworkCore;
 using OrderService.Services;
-using OrderDomain.Services;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
+using Domain.Services;
 
 namespace OrderService
 {

@@ -1,5 +1,5 @@
-﻿using CustomerDomain.Events.Input;
-using CustomerDomain.Events.Output;
+﻿using CustomerDomain.Events.Output;
+using Domain.Events;
 using MassTransit;
 
 namespace CustomerService.Services

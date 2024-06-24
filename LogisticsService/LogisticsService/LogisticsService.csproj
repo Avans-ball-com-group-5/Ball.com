@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LogisticsDomain\LogisticsDomain.csproj" />
+    <ProjectReference Include="..\LogisticsDomain\Domain.csproj" />
     <ProjectReference Include="..\LogisticsSQLInfrastructure\LogisticsSQLInfrastructure.csproj" />
   </ItemGroup>
 

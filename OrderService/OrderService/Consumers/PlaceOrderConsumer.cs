@@ -1,5 +1,5 @@
-﻿using MassTransit;
-using OrderDomain.Events;
+﻿using Domain.Events;
+using MassTransit;
 using OrderService.Handlers;
 using System;
 using System.Collections.Generic;

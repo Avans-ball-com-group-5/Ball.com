@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace OrderDomain.Events
+namespace Domain.Events
 {
     public class PlaceOrderEvent : OrderBaseEvent
     {

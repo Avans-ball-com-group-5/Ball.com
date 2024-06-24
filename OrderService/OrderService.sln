@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderDomain", "OrderDomain\OrderDomain.csproj", "{A4D94231-5FAA-46AA-B386-C9D0F98C54C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "OrderDomain\Domain.csproj", "{A4D94231-5FAA-46AA-B386-C9D0F98C54C6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderService", "OrderService\OrderService.csproj", "{00507789-1339-4B72-9976-54B8FF23D5DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderSQLInfrastructure", "OrderSQLInfrastructure\OrderSQLInfrastructure.csproj", "{137FAFB3-8B0D-4AFC-AB99-222DB6D7978A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderSQLInfrastructure", "OrderSQLInfrastructure\OrderSQLInfrastructure.csproj", "{137FAFB3-8B0D-4AFC-AB99-222DB6D7978A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

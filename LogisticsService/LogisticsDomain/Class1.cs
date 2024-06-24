@@ -1,7 +1,7 @@
-﻿namespace LogisticsDomain
+﻿namespace Domain
 {
     public class Class1
     {
-        
+
     }
 }

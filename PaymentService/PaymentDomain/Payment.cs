@@ -1,4 +1,4 @@
-﻿namespace PaymentDomain
+﻿namespace Domain
 {
     public class Payment
     {

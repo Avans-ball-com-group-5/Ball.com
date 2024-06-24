@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace OrderDomain
+namespace Domain
 {
     public class Customer
     {

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace CustomerDomain.Events.Input
+namespace Domain.Events
 {
     [Serializable]
     public class RegisterCustomerServiceTicket

@@ -1,4 +1,4 @@
-﻿using LogisticsDomain.Events.Input;
+﻿using Domain.Events;
 using LogisticsService.Handlers;
 using MassTransit;
 using System;

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace OrderDomain.Events
+namespace Domain.Events
 {
     [Serializable]
     public class PaymentCreatedEvent : OrderBaseEvent

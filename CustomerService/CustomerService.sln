@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerService", "Customer
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{B7C6AF20-5750-4320-B058-FCF8D534A548}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerDomain", "CustomerDomain\CustomerDomain.csproj", "{E8761262-C30D-48FF-9F19-F32D5B4DF57F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "CustomerDomain\Domain.csproj", "{E8761262-C30D-48FF-9F19-F32D5B4DF57F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

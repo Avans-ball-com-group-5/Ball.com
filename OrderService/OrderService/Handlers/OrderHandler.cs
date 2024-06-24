@@ -1,7 +1,8 @@
-﻿using MassTransit;
-using OrderDomain;
+﻿using Domain;
+using Domain.Events;
+using Domain.Services;
+using MassTransit;
 using OrderDomain.Events;
-using OrderDomain.Services;
 
 namespace OrderService.Handlers
 {

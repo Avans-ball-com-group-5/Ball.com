@@ -5,7 +5,7 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductService", "ProductService\ProductService.csproj", "{1042C86B-F80F-41A0-9E33-4CC2FC3C58A1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductDomain", "ProductDomain\ProductDomain.csproj", "{AC80776A-DDE2-4CD0-9AD2-989C8F2E70C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "ProductDomain\Domain.csproj", "{AC80776A-DDE2-4CD0-9AD2-989C8F2E70C2}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{AF40DBFC-9FB1-48DF-976F-4C6E7C3F078A}"
 EndProject

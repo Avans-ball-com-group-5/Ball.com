@@ -5,7 +5,7 @@ using LogisticsService.Handlers;
 using LogisticsService.Consumers;
 using LogisticsSQLInfrastructure;
 using Microsoft.EntityFrameworkCore;
-using LogisticsDomain.Services;
+using Domain.Services;
 
 namespace LogisticsService
 {

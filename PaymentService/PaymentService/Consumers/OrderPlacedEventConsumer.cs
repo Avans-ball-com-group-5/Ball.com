@@ -1,5 +1,5 @@
-﻿using MassTransit;
-using PaymentDomain.Events.Input;
+﻿using Domain.Events;
+using MassTransit;
 using PaymentService.Handlers;
 
 namespace PaymentService.Consumers

@@ -1,5 +1,5 @@
-﻿using LogisticsDomain.Events.Input;
-using LogisticsDomain.Events.Output;
+﻿using Domain.Events;
+using LogisticsDomain.Events.Input;
 using LogisticsService.Handlers;
 using MassTransit;
 using System;

@@ -1,8 +1,9 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace ProductDomain.Events.Output
+namespace Domain.Events
 {
-    public class ProductServiceRegistered
+    [Serializable]
+    public class RegisterProductService
     {
         [JsonPropertyName("productId")]
         public Guid Id { get; set; }
@@ -22,7 +23,7 @@ namespace ProductDomain.Events.Output
         [JsonPropertyName("stock")]
         public int Stock { get; set; }
 
-        public ProductServiceRegistered(Guid id, string name, string description, string company, decimal price, int stock)
+        public RegisterProductService(Guid id, string name, string description, string company, decimal price, int stock)
         {
             Id = id;
             Name = name;

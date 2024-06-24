@@ -1,4 +1,4 @@
-﻿using OrderDomain.Events;
+﻿using Domain.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace OrderDomain
+namespace Domain
 {
     public class Order
     {

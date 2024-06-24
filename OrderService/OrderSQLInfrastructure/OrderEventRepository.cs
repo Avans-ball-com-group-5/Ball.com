@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Domain;
+using Domain.Events;
+using Domain.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using OrderDomain;
-using OrderDomain.Events;
-using OrderDomain.Services;
 using System;
 using System.Diagnostics.Tracing;
 

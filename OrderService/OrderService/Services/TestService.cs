@@ -1,8 +1,8 @@
-﻿using MassTransit;
+﻿using Domain.Events;
+using Domain.Services;
+using MassTransit;
 using Microsoft.Extensions.Hosting;
 using OrderDomain;
-using OrderDomain.Events;
-using OrderDomain.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;

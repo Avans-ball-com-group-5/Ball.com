@@ -1,5 +1,5 @@
-﻿using LogisticsDomain.Models;
-using LogisticsDomain.Services;
+﻿using Domain.Models;
+using Domain.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;

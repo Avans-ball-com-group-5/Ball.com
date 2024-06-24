@@ -1,7 +1,6 @@
-﻿using LogisticsDomain.Events.Input;
-using LogisticsDomain.Events.Output;
-using LogisticsDomain.Models;
-using LogisticsDomain.Services;
+﻿using Domain.Events;
+using Domain.Models;
+using Domain.Services;
 using MassTransit;
 using MassTransit.Transports;
 using System;

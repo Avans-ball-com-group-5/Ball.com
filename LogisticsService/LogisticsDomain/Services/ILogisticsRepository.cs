@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LogisticsDomain.Models;
+using Domain.Models;
 
-namespace LogisticsDomain.Services
+namespace Domain.Services
 {
     public interface ILogisticsRepository
     {

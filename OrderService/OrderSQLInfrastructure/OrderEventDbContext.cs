@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using OrderDomain.Events;
+﻿using Domain.Events;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Tracing;
 
 namespace OrderSQLInfrastructure
