@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentService", "PaymentService\PaymentService.csproj", "{02FD02EF-D8F0-44E1-8770-EE3DE1CB31A1}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{510B005F-FE8C-4623-AEA0-F73F95EE3C71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentServiceApi", "PaymentServiceApi\PaymentServiceApi.csproj", "{A57112A0-665D-403C-A024-1C32F22A4CF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentServiceApi", "PaymentServiceApi\PaymentServiceApi.csproj", "{A57112A0-665D-403C-A024-1C32F22A4CF9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentSQLInfrastructure", "PaymentSQLInfrastructure\PaymentSQLInfrastructure.csproj", "{EFB08D91-211A-43A8-8623-C36E4C6E1336}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{02FD02EF-D8F0-44E1-8770-EE3DE1CB31A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{02FD02EF-D8F0-44E1-8770-EE3DE1CB31A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{02FD02EF-D8F0-44E1-8770-EE3DE1CB31A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{02FD02EF-D8F0-44E1-8770-EE3DE1CB31A1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{510B005F-FE8C-4623-AEA0-F73F95EE3C71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{510B005F-FE8C-4623-AEA0-F73F95EE3C71}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{510B005F-FE8C-4623-AEA0-F73F95EE3C71}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,6 +23,10 @@ Global
 		{A57112A0-665D-403C-A024-1C32F22A4CF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A57112A0-665D-403C-A024-1C32F22A4CF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A57112A0-665D-403C-A024-1C32F22A4CF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFB08D91-211A-43A8-8623-C36E4C6E1336}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFB08D91-211A-43A8-8623-C36E4C6E1336}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFB08D91-211A-43A8-8623-C36E4C6E1336}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFB08D91-211A-43A8-8623-C36E4C6E1336}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
