@@ -17,6 +17,10 @@ namespace PaymentService
         // This method is used to configure the host and services that the application will use, including consumers(endpoints)
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    config.AddEnvironmentVariables();
+                })
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddMassTransitServices(hostContext.Configuration, ConfigureBusEndpoints);
