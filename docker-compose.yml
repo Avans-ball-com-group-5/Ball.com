@@ -14,12 +14,12 @@ services:
         ports:
             - "15672:15672" # RabbitMQ Management Console
             - "5672:5672" # RabbitMQ Server
-            
+
     paymentservice:
         build:
             context: ./PaymentService
-            dockerfile: PaymentService/Dockerfile
-        container_name: paymentservice
+            dockerfile: PaymentServiceApi/Dockerfile
+        container_name: paymentserviceapi
         ports:
             - "5001:80"
         depends_on:
