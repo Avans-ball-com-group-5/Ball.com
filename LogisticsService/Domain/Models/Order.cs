@@ -15,7 +15,6 @@ namespace Domain.Models
         public LogisticsCompany? LogisticsCompany { get; set; }
         public Guid LogisticsCompanyId { get; set; }
 
-
         public override string ToString()
         {
             return $"Id: {Id}, CreatedAt: {CreatedAt}, PaymentId: {PaymentId}, Items: {string.Join(", ", Items.Select(i => $"{{ Id: {i.Id}, Amount: {i.Amount} }}"))}";

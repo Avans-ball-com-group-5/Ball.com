@@ -18,9 +18,5 @@ namespace Domain.Events
         public DateTime Timestamp { get; set; } = DateTime.Now;
         [JsonPropertyName("trackingId")]
         public Guid TrackingId { get; set; }
-        [JsonPropertyName("tracking")]
-        public Tracking? Tracking { get; set; }
-        public Guid OrderId { get; set; }
-        public Order? Order { get; set; }
     }
 }

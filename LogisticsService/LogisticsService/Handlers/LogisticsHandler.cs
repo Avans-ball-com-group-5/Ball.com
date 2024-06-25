@@ -1,6 +1,7 @@
 ﻿using Domain.Events;
 using Domain.Models;
 using Domain.Services;
+using LogisticsSQLInfrastructure;
 using MassTransit;
 using MassTransit.Transports;
 using System;
@@ -15,23 +16,26 @@ namespace LogisticsService.Handlers
     {
         private readonly IBus _bus;
         private readonly ILogisticsRepository _logisticsRepository;
+        private readonly ITrackingRepository _trackingRepository;
         private readonly string divider = "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------";
-        public LogisticsHandler(IBus bus, ILogisticsRepository logisticsRepository)
+        public LogisticsHandler(IBus bus, ILogisticsRepository logisticsRepository, ITrackingRepository trackingRepository)
         {
             _bus = bus;
             _logisticsRepository = logisticsRepository;
+            _trackingRepository = trackingRepository;
         }
 
         public async Task ManageLogistics(OrderReadyForShippingEvent orderEvent)
         {
-            // Example logic: select the cheapest logistics company for the order
-            LogisticsCompany logisticsCompany = _logisticsRepository.GetCheapestLogisticsCompany();
-
-            // Perform actions with the selected logistics company and the order details
-            Console.WriteLine($"{divider}\n\n\tOrder {orderEvent.OrderId} will be shipped by {logisticsCompany.Name} with price per km:\t{logisticsCompany.PricePerKm}\n\n{divider}");
+            var result = _logisticsRepository.GetCheapestLogisticsCompany();
+            var logisticsCompany = result.Company;
+            var randomDistance = result.Distance;
 
             Order order = orderEvent.Order;
             order.LogisticsCompany = logisticsCompany;
+
+            Console.WriteLine($"{divider}\n\n\tOrder {orderEvent.OrderId} will be shipped by {logisticsCompany.Name} with price:\t${randomDistance*logisticsCompany.PricePerKm} ({logisticsCompany.PricePerKm}$/km)\n\n{divider}");
+
 
             LogisticSelectionEvent logisticEvent = new LogisticSelectionEvent()
             {
@@ -54,20 +58,21 @@ namespace LogisticsService.Handlers
             OrderShippedEvent shippedEvent = new OrderShippedEvent()
             {
                 LogisticsCompanyId = logisticSelectionEvent.LogisticsCompanyId,
-                Tracking = tracking,
-                TrackingId = tracking.Id,
+                TrackingId = tracking.Id
             };
+
+            _trackingRepository.AddTracking(tracking);
 
             LogisticsCompany logisticsCompany = _logisticsRepository.GetLogisticsCompanyById(logisticSelectionEvent.LogisticsCompanyId);
 
-            Console.WriteLine($"{divider}\n\n\tOrder {shippedEvent.Tracking.OrderId} will be shipped under tracking ID {shippedEvent.TrackingId}.\n\n\tThe order is leaving the Ball.Com warehouse.\n\n\tFor more information look at the {logisticsCompany.Name} website:\t{logisticsCompany.Website}\n\n{divider}");
+            Console.WriteLine($"{divider}\n\n\tOrder {tracking.OrderId} will be shipped under tracking ID {shippedEvent.TrackingId}.\n\n\tThe order is leaving the Ball.Com warehouse.\n\n\tFor more information look at the {logisticsCompany.Name} website:\t{logisticsCompany.Website}\n\n{divider}");
 
             await _bus.Publish(shippedEvent);
         }
 
         public async Task ManageTracking(OrderShippedEvent orderShippedEvent)
         {
-            Tracking tracking = orderShippedEvent!.Tracking;
+            Tracking tracking = _trackingRepository.GetTrackingById(orderShippedEvent.TrackingId);
 
             OrderTrackedEvent orderTrackedEvent = new OrderTrackedEvent()
             {
@@ -83,8 +88,6 @@ namespace LogisticsService.Handlers
             }
 
             await _bus.Publish(orderTrackedEvent);
-            var sendEndpoint = await _bus.GetSendEndpoint(new Uri("queue:tracked-order-event-queue"));
-            await sendEndpoint.Send(orderTrackedEvent);
         }
     }
 }

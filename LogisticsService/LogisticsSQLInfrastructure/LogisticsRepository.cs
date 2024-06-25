@@ -17,9 +17,26 @@ namespace LogisticsSQLInfrastructure
             _context = context;
         }
 
-        public LogisticsCompany GetCheapestLogisticsCompany()
+        public (LogisticsCompany Company, int Distance) GetCheapestLogisticsCompany()
         {
-            return _context.LogisticsCompanies.OrderBy(x => x.PricePerKm).FirstOrDefault();
+            var random = new Random();
+
+            // Create a list of companies with their random distances
+            var companiesWithDistances = _context.LogisticsCompanies
+                .Select(company => new
+                {
+                    Company = company,
+                    Distance = random.Next(10, 50)
+                })
+                .ToList();
+
+            // Find the company with the cheapest price per km considering the random distance
+            var cheapestCompanyWithDistance = companiesWithDistances
+                .OrderBy(x => x.Company.PricePerKm * x.Distance)
+                .FirstOrDefault();
+
+            // Return the cheapest company along with the distance
+            return (cheapestCompanyWithDistance?.Company, cheapestCompanyWithDistance?.Distance ?? 0);
         }
 
         public LogisticsCompany GetLogisticsCompanyById(Guid id)
