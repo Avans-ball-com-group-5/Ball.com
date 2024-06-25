@@ -73,6 +73,7 @@ namespace LogisticsService
             // Add all consumers here for DI. This will allow the consumers to be resolved by the DI container
             configurator.AddConsumer<OrderReadyForShippingConsumer, OrderReadyForShippingDefinition>();
             configurator.AddConsumer<LogisticSelectionConsumer, LogisticSelectionDefinition>();
+            configurator.AddConsumer<OrderTrackingConsumer, OrderTrackingDefinition>();
         }
     }
 }

@@ -35,18 +35,12 @@ namespace LogisticsService.Handlers
 
             LogisticSelectionEvent logisticEvent = new LogisticSelectionEvent()
             {
-                LogisticsCompany = logisticsCompany,
-                LogisticsCompanyId = order.LogisticsCompanyId,
+                LogisticsCompanyId = logisticsCompany.Id,
                 Order = order,
                 OrderId = order.Id
             };
 
-            Console.WriteLine(logisticEvent);
-
             await _bus.Publish(logisticEvent);
-            var sendEndpoint = await _bus.GetSendEndpoint(new Uri("queue:logistic-selection-queue"));
-            await sendEndpoint.Send(logisticEvent);
-
         }
 
         public async Task ShipOrder(LogisticSelectionEvent logisticSelectionEvent) {
@@ -59,17 +53,36 @@ namespace LogisticsService.Handlers
 
             OrderShippedEvent shippedEvent = new OrderShippedEvent()
             {
-                LogisticsCompany = logisticSelectionEvent.LogisticsCompany,
                 LogisticsCompanyId = logisticSelectionEvent.LogisticsCompanyId,
+                Tracking = tracking,
+                TrackingId = tracking.Id,
+            };
+
+            LogisticsCompany logisticsCompany = _logisticsRepository.GetLogisticsCompanyById(logisticSelectionEvent.LogisticsCompanyId);
+
+            Console.WriteLine($"{divider}\n\n\tOrder {shippedEvent.Tracking.OrderId} will be shipped under tracking ID {shippedEvent.TrackingId}.\n\n\tThe order is leaving the Ball.Com warehouse.\n\n\tFor more information look at the {logisticsCompany.Name} website:\t{logisticsCompany.Website}\n\n{divider}");
+
+            await _bus.Publish(shippedEvent);
+        }
+
+        public async Task ManageTracking(OrderShippedEvent orderShippedEvent)
+        {
+            Tracking tracking = orderShippedEvent!.Tracking;
+
+            OrderTrackedEvent orderTrackedEvent = new OrderTrackedEvent()
+            {
                 Tracking = tracking,
                 TrackingId = tracking.Id
             };
 
-            Console.WriteLine($"{divider}\n\n\tOrder {shippedEvent.Tracking.OrderId} will be shipped under tracking ID {shippedEvent.TrackingId}.\n\n\tThe order is leaving the Ball.Com warehouse.\n\n\tFor more information look at the {shippedEvent.LogisticsCompany!.Name} website:\t{shippedEvent.LogisticsCompany!.Website}\n\n{divider}");
+            Console.WriteLine($"{divider}\n\n\tOrder number:\t{tracking.OrderId}\n\n\tOrder Status:\t{tracking.Status}");
+            Console.WriteLine("\n\tProducts:\tName\t\t\t\tAmount");
+            foreach(ItemRef item in tracking.Order.Items)
+            {
+                Console.WriteLine($"\t\t\t{item.Name}\t\t×{item.Amount}");
+            }
 
-            await _bus.Publish(shippedEvent);
-            var sendEndpoint = await _bus.GetSendEndpoint(new Uri("queue:shipped-event-queue"));
-            await sendEndpoint.Send(shippedEvent);
+            await _bus.Publish(orderTrackedEvent);
         }
     }
 }
