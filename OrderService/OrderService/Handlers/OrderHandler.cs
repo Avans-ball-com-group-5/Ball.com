@@ -30,25 +30,10 @@ namespace OrderService.Handlers
         
         public async Task ManageOrder(PaymentCreatedEvent @event)
         {
+            Console.WriteLine($"Payment created for order {@event.OrderId}");
             _orderRepository.SaveOrderEvent(@event);
-            
-            // Item picking & Order packaging
-            // TODO: Remove dummy data
-            List<ItemRef> itemRefs = new()
-            {
-                new()
-                {
-                    Amount = 1
-                },
-                new()
-                {
-                    Amount = 1
-                }
-            };
-            var orderPackagedEvent = new OrderPackagedEvent(@event.OrderId)
-            {
-                Items = itemRefs
-            };
+
+            var orderPackagedEvent = new OrderPackagedEvent(@event.OrderId);
             _orderRepository.SaveOrderEvent(orderPackagedEvent);
 
             var aggregate = _orderRepository.GetOrderById(orderPackagedEvent.OrderId);

@@ -14,9 +14,11 @@ namespace Domain
         public Guid Id { get; set; } = Guid.NewGuid();
         public DateTime CreatedAt { get; set; }
         public Guid PaymentId { get; set; }
-        public List<ItemRef> Items { get; set; } = new();
+        public Dictionary<Guid, int> Items { get; set; } = new();
         public void Apply(PlaceOrderEvent @event)
         {
+            this.Id = @event.Order.Id;
+            this.Items = @event.Order.Items;
         }
         public void Apply(OrderPlacedEvent @event)
         {
@@ -28,18 +30,11 @@ namespace Domain
         }
         public void Apply(OrderPackagedEvent @event)
         {
-            Items = @event.Items;
         }
 
         public override string ToString()
         {
             return $"Id: {Id}, CreatedAt: {CreatedAt}, PaymentId: {PaymentId}, Items: {string.Join(", ", Items.Select(i => $"{{ Id: {i.Id}, Amount: {i.Amount} }}"))}";
         }
-    }
-
-    public class ItemRef
-    {
-        public Guid Id { get; set; } = Guid.NewGuid();
-        public int Amount { get; set; }
     }
 }
