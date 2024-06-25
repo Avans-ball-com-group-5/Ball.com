@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using Domain.Events;
 
-namespace PaymentService
+namespace PaymentServiceApi
 {
     public class BusSenderBackgroundService : BackgroundService
     {

@@ -1,7 +1,7 @@
 ﻿using Domain.Events;
 using MassTransit;
 
-namespace PaymentService.Handlers
+namespace PaymentServiceApi.Handlers
 {
     public class PaymentHandler
     {
@@ -38,16 +38,16 @@ namespace PaymentService.Handlers
             }
         }
 
-        public async Task HandleAfterPayCompletedEvent(PayAfterPayRequest message)
+        public async Task HandleAfterPayCompletedEvent(Guid message)
         {
             // Update db entity to completed
             // Get orderId from db entity
-
+            Console.WriteLine("Payment id: " + message);
             // Send OrderPaymentCompletedEvent
             var orderPaymentCompletedEvent = new OrderPaymentCompletedEvent()
             {
                 OrderId = Guid.NewGuid(),
-                PaymentId = message.PaymentId
+                PaymentId = message
             };
 
             await bus.Publish(orderPaymentCompletedEvent);

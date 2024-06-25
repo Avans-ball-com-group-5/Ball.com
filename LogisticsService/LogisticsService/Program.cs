@@ -6,6 +6,7 @@ using LogisticsService.Consumers;
 using LogisticsSQLInfrastructure;
 using Microsoft.EntityFrameworkCore;
 using Domain.Services;
+using Microsoft.Extensions.Configuration;
 
 namespace LogisticsService
 {
@@ -13,36 +14,44 @@ namespace LogisticsService
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            var host = CreateHostBuilder(args).Build();
+            MigrateDatabase(host);
+            host.Run();
         }
 
         // This method is used to configure the host and services that the application will use, including consumers(endpoints)
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    config.AddEnvironmentVariables();
+                })
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddMassTransitServices(ConfigureBusEndpoints);
-                    services.ConfigureHandlers();
+                    services.AddMassTransitServices(hostContext.Configuration, ConfigureBusEndpoints);
+                    services.ConfigureHandlers(hostContext.Configuration);
                 });
 
         // This method is used to configure the handlers that the application will use through DI
-        private static IServiceCollection ConfigureHandlers(this IServiceCollection services)
+        private static IServiceCollection ConfigureHandlers(this IServiceCollection services, IConfiguration configuration)
         {
+            var connectionString = configuration.GetConnectionString("LogisticsDbContext");
+            connectionString ??= "Server=localhost,1435;Database=LogisticsDb;User=sa;Password=Your_password123;TrustServerCertificate=True";
+            services.AddDbContext<LogisticsDbContext>(options =>
+                        options.UseSqlServer(connectionString, c => c.MigrationsAssembly("LogisticsSQLInfrastructure")),ServiceLifetime.Scoped);
+
             services.AddScoped<LogisticsHandler>();
             services.AddScoped<ILogisticsRepository, LogisticsRepository>();
-            // This adds a service that will run in the background and send messages to the bus every 30 seconds for testing purposes
-            // TODO: Change server accordingly
-            services.AddDbContext<LogisticsDbContext>(options =>
-                        options.UseSqlServer("Server=localhost,1433;Database=YourDatabaseName;User Id=sa;Password=Your_password123;TrustServerCertificate=True",
-                        c => c.MigrationsAssembly("LogisticsSQLInfrastructure")),ServiceLifetime.Scoped);
-
-            services.AddHostedService<BusSenderBackgroundService>();
+            // services.AddHostedService<BusSenderBackgroundService>();
 
             return services;
         }
 
-        private static IServiceCollection AddMassTransitServices(this IServiceCollection services, Action<IBusRegistrationConfigurator> busConfigure)
+        private static IServiceCollection AddMassTransitServices(this IServiceCollection services, IConfiguration configuration, Action<IBusRegistrationConfigurator> busConfigure)
         {
+            var rabbitMQHostName = configuration["RabbitMQ:HostName"];
+            rabbitMQHostName ??= "localhost";
+            Console.WriteLine("rabbit hostname: " + rabbitMQHostName);
             services.AddMassTransit(x =>
             {
                 // Default settings
@@ -55,7 +64,7 @@ namespace LogisticsService
                 {
                     cfg.UseNewtonsoftJsonSerializer();
                     cfg.UseNewtonsoftJsonDeserializer();
-                    cfg.Host("localhost", "/", h =>
+                    cfg.Host(rabbitMQHostName, "/", h =>
                     {
                         h.Username("guest");
                         h.Password("guest");
@@ -74,6 +83,24 @@ namespace LogisticsService
             configurator.AddConsumer<OrderReadyForShippingConsumer, OrderReadyForShippingDefinition>();
             configurator.AddConsumer<LogisticSelectionConsumer, LogisticSelectionDefinition>();
             configurator.AddConsumer<OrderTrackingConsumer, OrderTrackingDefinition>();
+        }
+
+        private static void MigrateDatabase(IHost host)
+        {
+            Console.WriteLine("Starting migration");
+            using var scope = host.Services.CreateScope();
+            var services = scope.ServiceProvider;
+
+            try
+            {
+                var dbContext = services.GetRequiredService<LogisticsDbContext>();
+                dbContext.Database.Migrate();
+                Console.WriteLine("Database migration successful.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while migrating the database: {ex.Message}");
+            }
         }
     }
 }

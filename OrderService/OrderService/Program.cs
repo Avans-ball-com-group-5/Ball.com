@@ -45,8 +45,9 @@ namespace OrderService
                 options.UseSqlServer(connectionString, c => c.MigrationsAssembly("OrderSQLInfrastructure")), ServiceLifetime.Scoped);
             Console.WriteLine("SQL Server injection worked");
 
-            services.AddScoped<OrderHandler>();
-            services.AddScoped<IOrderRepository, OrderEventRepository>();
+            services.AddScoped<OrderEventHandler>();
+            services.AddScoped<IOrderCommandHandler, OrderCommandHandler>();
+            services.AddScoped<IOrderQueryHandler, OrderQueryHandler>();
             services.AddHostedService<TestService>();
 
             return services;
@@ -88,6 +89,7 @@ namespace OrderService
             // Add all consumers here for DI. This will allow the consumers to be resolved by the DI container
             configurator.AddConsumer<PlaceOrderConsumer, PlaceOrderConsumerDefinition>();
             configurator.AddConsumer<PaymentCreatedConsumer, PaymentCreatedConsumerDefinition>();
+            configurator.AddConsumer<OrderDenormalizerConsumer, OrderDenormalizerConsumerDefinition>();
         }
 
         // Method to perform database migration
