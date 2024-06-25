@@ -31,6 +31,7 @@ namespace OrderService.Services
                         new()
                         {
                             Id = Guid.NewGuid(),
+                            Name = "Sneakers",
                             Amount = 2
                         }
                     }
