@@ -11,15 +11,15 @@ namespace OrderService.Consumers
 {
     public class PlaceOrderConsumer : IConsumer<PlaceOrderEvent>
     {
-        private readonly OrderHandler _orderPublisher;
-        public PlaceOrderConsumer(OrderHandler orderPublisher)
+        private readonly OrderEventHandler _handler;
+        public PlaceOrderConsumer(OrderEventHandler handler)
         {
-            _orderPublisher = orderPublisher;
+            _handler = handler;
         }
         public async Task Consume(ConsumeContext<PlaceOrderEvent> context)
         {
             Console.WriteLine("Sending request to place order...");
-            await _orderPublisher.PlaceOrder(context.Message);
+            await _handler.PlaceOrder(context.Message);
         }
     }
 }

@@ -6,8 +6,8 @@ namespace OrderService.Consumers
 {
     public class PaymentCreatedConsumer : IConsumer<PaymentCreatedEvent>
     {
-        private readonly OrderHandler _orderPublisher;
-        public PaymentCreatedConsumer(OrderHandler orderPublisher)
+        private readonly OrderEventHandler _orderPublisher;
+        public PaymentCreatedConsumer(OrderEventHandler orderPublisher)
         {
             _orderPublisher = orderPublisher;
         }

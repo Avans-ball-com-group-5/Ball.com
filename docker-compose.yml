@@ -8,6 +8,15 @@ services:
         ports:
             - "1435:1433"
 
+    logisticssql:
+        container_name: logisticssql
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        environment:
+            SA_PASSWORD: Your_password123
+            ACCEPT_EULA: "Y"
+        ports:
+            - "1436:1433"
+
     rabbitmq:
         container_name: rabbitmq
         image: masstransit/rabbitmq
@@ -39,4 +48,17 @@ services:
             - rabbitmq
         environment:
             - ConnectionStrings__OrderDbContext=Server=ordersql,1433;Database=OrderDB;User=sa;Password=Your_password123;TrustServerCertificate=True
+            - RabbitMQ__HostName=rabbitmq
+
+    logisticsservice:
+        build:
+            context: ./LogisticsService
+            dockerfile: LogisticsService/Dockerfile
+        container_name: logisticsservice
+        ports:
+            - "5003:80"
+        depends_on:
+            - rabbitmq
+        environment:
+            - ConnectionStrings__LogisticsDbContext=Server=logisticssql,1433;Database=LogisticsDB;User=sa;Password=Your_password123;TrustServerCertificate=True
             - RabbitMQ__HostName=rabbitmq

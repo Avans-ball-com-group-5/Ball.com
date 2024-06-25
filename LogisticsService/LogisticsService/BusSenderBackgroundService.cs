@@ -29,10 +29,28 @@ namespace LogisticsService
                         CreatedAt = DateTime.Now,
                         LogisticsCompany = new LogisticsCompany { Id = logisticsGuid, Location = "Breda", Name = "MailNL", PricePerKm = 0.5m },
                         LogisticsCompanyId = logisticsGuid,
-                        PaymentId = Guid.NewGuid()
+                        PaymentId = Guid.NewGuid(),
+                        Items = new List<ItemRef>()
+                        {
+                            new ItemRef()
+                            {
+                                Amount = 1,
+                                Name = "Paprika Pringles",
+                            },
+                            new ItemRef()
+                            {
+                                Amount = 2,
+                                Name = "Extra zachte spons"
+                            },
+                            new ItemRef()
+                            {
+                                Amount= 1,
+                                Name = "Rubbere handschoen"
+                            }
+                        }
                     },
                     Timestamp = DateTime.Now,
-                    OrderId = orderGuid
+                    OrderId = orderGuid,
                 });
                 /*
                 var sendEndpoint = await bus.GetSendEndpoint(new Uri("queue:test-test-test"));
