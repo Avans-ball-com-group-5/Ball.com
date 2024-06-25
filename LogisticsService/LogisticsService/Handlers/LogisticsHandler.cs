@@ -83,6 +83,8 @@ namespace LogisticsService.Handlers
             }
 
             await _bus.Publish(orderTrackedEvent);
+            var sendEndpoint = await _bus.GetSendEndpoint(new Uri("queue:tracked-order-event-queue"));
+            await sendEndpoint.Send(orderTrackedEvent);
         }
     }
 }
