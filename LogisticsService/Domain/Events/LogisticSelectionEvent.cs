@@ -13,8 +13,6 @@ namespace Domain.Events
         [JsonPropertyName("id")]
         public Guid Id { get; set; } = Guid.NewGuid();
         [JsonPropertyName("logisticsCompany")]
-        public LogisticsCompany? LogisticsCompany { get; set; }
-        [JsonPropertyName("logisticsCompanyId")]
         public Guid LogisticsCompanyId { get; set; }
         [JsonPropertyName("timestamp")]
         public DateTime Timestamp { get; set; } = DateTime.Now;

@@ -12,8 +12,6 @@ namespace Domain.Events
     {
         [JsonPropertyName("id")]
         public Guid Id { get; set; } = Guid.NewGuid();
-        [JsonPropertyName("logisticsCompany")]
-        public LogisticsCompany? LogisticsCompany { get; set; }
         [JsonPropertyName("logisticsCompanyId")]
         public Guid LogisticsCompanyId { get; set; }
         [JsonPropertyName("timestamp")]
@@ -22,5 +20,7 @@ namespace Domain.Events
         public Guid TrackingId { get; set; }
         [JsonPropertyName("tracking")]
         public Tracking? Tracking { get; set; }
+        public Guid OrderId { get; set; }
+        public Order? Order { get; set; }
     }
 }
