@@ -1,8 +1,8 @@
 ﻿using Domain.Events;
 using MassTransit;
-using PaymentService.Handlers;
+using PaymentServiceApi.Handlers;
 
-namespace PaymentService.Consumers
+namespace PaymentServiceApi.Consumers
 {
     public class AfterPayConsumer : IConsumer<PayAfterPayRequest>
     {
@@ -13,7 +13,7 @@ namespace PaymentService.Consumers
         }
         public async Task Consume(ConsumeContext<PayAfterPayRequest> context)
         {
-            await paymentHandler.HandleAfterPayCompletedEvent(context.Message);
+            await paymentHandler.HandleAfterPayCompletedEvent(context.Message.PaymentId);
         }
     }
 }

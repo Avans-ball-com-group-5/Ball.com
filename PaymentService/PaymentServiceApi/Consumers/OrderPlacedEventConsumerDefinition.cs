@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 
-namespace PaymentService.Consumers
+namespace PaymentServiceApi.Consumers
 {
     public class OrderPlacedEventConsumerDefinition : ConsumerDefinition<OrderPlacedEventConsumer>
     {
