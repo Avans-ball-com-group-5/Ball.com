@@ -14,7 +14,7 @@ services:
         ports:
             - "15672:15672" # RabbitMQ Management Console
             - "5672:5672" # RabbitMQ Server
-            
+
     paymentservice:
         build:
             context: ./PaymentService

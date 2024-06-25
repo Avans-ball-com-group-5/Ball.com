@@ -5,44 +5,47 @@ using MassTransit;
 
 namespace OrderService.Handlers
 {
-    public class OrderHandler
+    public class OrderEventHandler
     {
         private readonly IBus _bus;
-        private readonly IOrderRepository _orderRepository;
-        public OrderHandler(IBus bus, IOrderRepository orderRepository)
+        private readonly IOrderCommandHandler _orderCommandHandler;
+        private readonly IOrderQueryHandler _orderQueryHandler;
+        public OrderEventHandler(IBus bus, IOrderCommandHandler orderCommandHandler, IOrderQueryHandler orderQueryHandler)
         {
             _bus = bus;
-            _orderRepository = orderRepository;
+            _orderCommandHandler = orderCommandHandler;
+            _orderQueryHandler = orderQueryHandler;
         }
 
         public async Task PlaceOrder(PlaceOrderEvent @event)
         {
-            _orderRepository.SaveOrderEvent(@event);
+            _orderCommandHandler.SaveOrderEvent(@event);
 
             // Order was placed, store event and publish to event bus
             var orderPlacedEvent = new OrderPlacedEvent(@event.OrderId)
             {
                 Timestamp = DateTime.UtcNow,
             };
-            _orderRepository.SaveOrderEvent(orderPlacedEvent);
+            _orderCommandHandler.SaveOrderEvent(orderPlacedEvent);
             await _bus.Publish(orderPlacedEvent);
         }
         
         public async Task ManageOrder(PaymentCreatedEvent @event)
         {
             Console.WriteLine($"Payment created for order {@event.OrderId}");
-            _orderRepository.SaveOrderEvent(@event);
+            _orderCommandHandler.SaveOrderEvent(@event);
 
             var orderPackagedEvent = new OrderPackagedEvent(@event.OrderId);
-            _orderRepository.SaveOrderEvent(orderPackagedEvent);
+            _orderCommandHandler.SaveOrderEvent(orderPackagedEvent);
 
-            var aggregate = _orderRepository.GetOrderById(orderPackagedEvent.OrderId);
+            var order = _orderQueryHandler.GetAggregateById(orderPackagedEvent.OrderId);
+            Console.WriteLine($"Order: {order}");
 
             await _bus.Publish(
                 new OrderReadyForShippingEvent(@event.OrderId)
                 {
                     Timestamp = DateTime.UtcNow,
-                    Order = aggregate
+                    Order = order
                 });
         }
     }

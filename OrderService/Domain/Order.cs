@@ -11,30 +11,40 @@ namespace Domain
 {
     public class Order
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
-        public DateTime CreatedAt { get; set; }
-        public Guid PaymentId { get; set; }
-        public Dictionary<Guid, int> Items { get; set; } = new();
-        public void Apply(PlaceOrderEvent @event)
+        public Guid Id { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public Guid? PaymentId { get; set; }
+        public List<ItemRef>? Items { get; set; }
+        public void Apply(OrderBaseEvent @event)
         {
-            this.Id = @event.Order.Id;
-            this.Items = @event.Order.Items;
-        }
-        public void Apply(OrderPlacedEvent @event)
-        {
-            CreatedAt = @event.Timestamp;
-        }
-        public void Apply(PaymentCreatedEvent @event)
-        {
-            PaymentId = @event.PaymentId;
-        }
-        public void Apply(OrderPackagedEvent @event)
-        {
+            switch (@event)
+            {
+                case PlaceOrderEvent e:
+                    this.Id = e.OrderId;
+                    if (e.Order != null)
+                       this.Items = e.Order.Items;
+                    break;
+                case OrderPlacedEvent e:
+                    this.Id = e.OrderId;
+                    this.CreatedAt = e.Timestamp;
+                    break;
+                case PaymentCreatedEvent e:
+                    this.Id = e.OrderId;
+                    this.PaymentId = e.PaymentId;
+                    break;
+                case OrderPackagedEvent e:
+                    break;
+            }
         }
 
         public override string ToString()
         {
-            return $"Id: {Id}, CreatedAt: {CreatedAt}, PaymentId: {PaymentId}, Items: {string.Join(", ", Items.Select(i => $"{{ Id: {i.Id}, Amount: {i.Amount} }}"))}";
+            return $"Id: {Id}, CreatedAt: {CreatedAt}, PaymentId: {PaymentId}, Items: {string.Join(", ", Items ?? new List<ItemRef>())}";
         }
+    }
+    public class ItemRef
+    {
+        public Guid Id { get; set; }
+        public int Amount { get; set; }
     }
 }

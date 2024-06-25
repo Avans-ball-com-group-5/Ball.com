@@ -24,5 +24,6 @@ namespace Domain.Events
         public DateTime Timestamp { get; set; }
         [JsonPropertyName("eventData")]
         public string EventData { get; set; }
+        public object Order { get; internal set; }
     }
 }

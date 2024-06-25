@@ -8,24 +8,32 @@ namespace OrderService.Services
     public class TestService : BackgroundService
     {
         private readonly IBus bus;
-        private readonly IOrderRepository repository;
+        // private readonly IOrderCommandHandler repository;
 
-        public TestService(IBus bus, IOrderRepository repository)
+        public TestService(IBus bus/*, IOrderCommandHandler repository */)
         {
             this.bus = bus;
-            this.repository = repository;
+            // this.repository = repository;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             var orderId = Guid.NewGuid();
-            
+
             PlaceOrderEvent @event = new(orderId)
             {
                 Timestamp = DateTime.UtcNow,
                 Order = new()
                 {
                     Id = orderId,
+                    Items = new()
+                    {
+                        new()
+                        {
+                            Id = Guid.NewGuid(),
+                            Amount = 2
+                        }
+                    }
                 }
             };
             Console.WriteLine("Sending PlaceOrderEvent to bus...");

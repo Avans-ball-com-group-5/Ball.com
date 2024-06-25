@@ -13,8 +13,5 @@ namespace Domain.Events
         public OrderPackagedEvent(Guid orderId) : base(orderId)
         {
         }
-
-        [JsonPropertyName("items")]
-        public List<ItemRef> Items { get; set; } = new();
     }
 }
