@@ -18,7 +18,7 @@ namespace CustomerServiceApi
             do
             {
                 await bus.Publish(new RegisterCustomerServiceTicket(Guid.NewGuid(), "message"));
-                await Task.Delay(30000, stoppingToken);
+                await Task.Delay(TimeSpan.FromHours(24), stoppingToken);
             } while (true);
         }
     }
