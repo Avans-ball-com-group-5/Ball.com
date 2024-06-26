@@ -43,7 +43,7 @@ namespace LogisticsService
             services.AddScoped<ILogisticsRepository, LogisticsRepository>();
             services.AddScoped<ITrackingRepository, TrackingRepository>();
             services.AddScoped<LogisticsHandler>();
-            services.AddHostedService<BusSenderBackgroundService>();
+            //services.AddHostedService<BusSenderBackgroundService>();
 
             return services;
         }
