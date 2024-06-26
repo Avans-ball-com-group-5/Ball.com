@@ -71,7 +71,7 @@ services:
     logisticsservice:
         build:
             context: ./LogisticsService
-            dockerfile: LogisticsService/Dockerfile
+            dockerfile: LogisticsServiceApi/Dockerfile
         container_name: logisticsservice
         ports:
             - "5003:80"
