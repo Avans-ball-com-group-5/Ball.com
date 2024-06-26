@@ -50,7 +50,7 @@ public static class Program
     private static IServiceCollection ConfigureHandlers(this IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("PaymentDbContext");
-        connectionString ??= "Server=localhost,1436;Database=PaymentDb;User=sa;Password=Your_password123;TrustServerCertificate=True";
+        connectionString ??= "Server=localhost,1439;Database=PaymentDb;User=sa;Password=Your_password123;TrustServerCertificate=True";
         services.AddDbContext<PaymentDbContext>(options =>
                     options.UseSqlServer(connectionString, c => c.MigrationsAssembly("PaymentSQLInfrastructure")), ServiceLifetime.Scoped);
 

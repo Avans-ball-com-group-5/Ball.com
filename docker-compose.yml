@@ -63,7 +63,7 @@ services:
             - rabbitmq
         environment:
             - RabbitMQ__HostName=rabbitmq
-            - ConnectionStrings__OrderDbContext=Server=ordersql,1433;Database=PaymentDB;User=sa;Password=Your_password123;TrustServerCertificate=True
+            - ConnectionStrings__PaymentDbContext=Server=paymentsql,1433;Database=PaymentDB;User=sa;Password=Your_password123;TrustServerCertificate=True
 
     orderservice:
         build:
