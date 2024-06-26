@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 
-namespace OrderService.Consumers
+namespace OrderServiceApi.Consumers
 {
     public class PaymentCreatedConsumerDefinition : ConsumerDefinition<PaymentCreatedConsumer>
     {

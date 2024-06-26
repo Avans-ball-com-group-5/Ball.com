@@ -1,12 +1,10 @@
 ﻿using Domain;
 using Domain.Events;
 using Domain.Services;
-using Newtonsoft.Json.Linq;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Newtonsoft.Json.Linq;
+
 namespace OrderSQLInfrastructure
 {
     public class OrderQueryHandler : IOrderQueryHandler
@@ -20,8 +18,9 @@ namespace OrderSQLInfrastructure
         // Get order from read model
         public Order GetOrderById(Guid orderId)
         {
-            var order = _context.Orders.Find(orderId);
-            return order ?? throw new Exception("Order not found");
+            return _context.Orders.Include(x => x.Items)
+                .FirstOrDefault(x => x.Id == orderId) 
+                ?? throw new Exception($"Order with id: {orderId} not found");
         }
 
         // Get order by replaying events

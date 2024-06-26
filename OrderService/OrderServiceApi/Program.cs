@@ -1,54 +1,72 @@
-using Microsoft.Extensions.Hosting;
 using MassTransit;
-using Microsoft.Extensions.DependencyInjection;
-using OrderService.Consumers;
-using OrderService.Handlers;
+using OrderServiceApi.Consumers;
+using OrderServiceApi.Handlers;
 using OrderSQLInfrastructure;
 using Microsoft.EntityFrameworkCore;
-using OrderService.Services;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json.Linq;
 using Domain.Services;
 
-namespace OrderService
+namespace OrderServiceApi
 {
     public static class Program
     {
         public static void Main(string[] args)
         {
-            var host = CreateHostBuilder(args).Build();
-            // Run database migration before starting the application
-            MigrateDatabase(host);
-            host.Run();
+            var builder = WebApplication.CreateBuilder(args);
+
+            builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
+            {
+                config.AddEnvironmentVariables();
+            })
+            .ConfigureServices((hostContext, services) =>
+            {
+                services.AddMassTransitServices(hostContext.Configuration, ConfigureBusEndpoints);
+                services.ConfigureHandlers(hostContext.Configuration);
+            });
+
+            // Add services to the container.
+
+            builder.Services.AddControllers();
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+
+            var app = builder.Build();
+
+            MigrateDatabase(app);
+
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+            app.UseHttpsRedirection();
+
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(e =>
+            {
+                e.MapControllers();
+            });
+
+            app.Run();
         }
 
-        // This method is used to configure the host and services that the application will use, including consumers(endpoints)
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((hostingContext, config) =>
-                {
-                    config.AddEnvironmentVariables();
-                })
-                .ConfigureServices((hostContext, services) =>
-                {
-                    services.AddMassTransitServices(hostContext.Configuration, ConfigureBusEndpoints);
-                    services.ConfigureHandlers(hostContext.Configuration);
-                });
-
-        // This method is used to configure the handlers that the application will use through DI
         private static IServiceCollection ConfigureHandlers(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("OrderDbContext");
-            connectionString ??= "Server=localhost,1435;Database=OrderDB;User=sa;Password=Your_password123;TrustServerCertificate=True";
+            connectionString ??= "Server=localhost,1431;Database=OrderDB;User=sa;Password=Your_password123;TrustServerCertificate=True";
             Console.WriteLine(connectionString);
             services.AddDbContext<OrderEventDbContext>(options =>
                 options.UseSqlServer(connectionString, c => c.MigrationsAssembly("OrderSQLInfrastructure")), ServiceLifetime.Scoped);
             Console.WriteLine("SQL Server injection worked");
 
-            services.AddScoped<OrderEventHandler>();
             services.AddScoped<IOrderCommandHandler, OrderCommandHandler>();
             services.AddScoped<IOrderQueryHandler, OrderQueryHandler>();
-            services.AddHostedService<TestService>();
+            services.AddScoped<OrderEventHandler>();
 
             return services;
         }

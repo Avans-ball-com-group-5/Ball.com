@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Domain.Events
+﻿namespace Domain.Events
 {
     public class OrderPlacedEvent : OrderBaseEvent
     {

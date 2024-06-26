@@ -1,7 +1,6 @@
 ﻿using Domain;
 using Domain.Events;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.Tracing;
 
 namespace OrderSQLInfrastructure
 {
