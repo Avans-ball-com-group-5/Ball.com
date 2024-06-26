@@ -1,65 +1,108 @@
-﻿
-using ProductService.Messaging;
-using ProductService.Services;
+using Domain;
 using MassTransit;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+using ProductSQLInfrastructure;
 
-namespace ProductService
+public static class Program
 {
-    public static class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
+        var builder = WebApplication.CreateBuilder(args);
+
+        builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
         {
-            CreateHostBuilder(args).Build().Run();
+            config.AddEnvironmentVariables();
+        })
+        .ConfigureServices((hostContext, services) =>
+        {
+            services.AddMassTransitServices(hostContext.Configuration);
+            services.ConfigureHandlers(hostContext.Configuration);
+        });
+
+        builder.Services.AddControllers();
+        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+
+        var app = builder.Build();
+
+        MigrateDatabase(app);
+
+        // Configure the HTTP request pipeline.
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
         }
 
-        // This method is used to configure the host and services that the application will use, including consumers(endpoints)
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureServices((hostContext, services) =>
-                {
-                    services.AddMassTransitServices(ConfigureBusEndpoints);
-                    services.ConfigureHandlers();
-                });
+        app.UseHttpsRedirection();
 
-        // This method is used to configure the handlers that the application will use through DI
-        private static IServiceCollection ConfigureHandlers(this IServiceCollection services)
+        app.UseRouting();
+
+        app.UseAuthorization();
+
+        app.UseEndpoints(e =>
         {
-            services.AddScoped<ProductHandler>();
-            // This adds a service that will run in the background and send messages to the bus every 30 seconds for testing purposes
-            services.AddHostedService<BusSenderBackgroundService>();
+            e.MapControllers();
+        });
 
-            return services;
-        }
+        app.Run();
+    }
 
-        private static IServiceCollection AddMassTransitServices(this IServiceCollection services, Action<IBusRegistrationConfigurator> busConfigure)
+    private static IServiceCollection ConfigureHandlers(this IServiceCollection services, IConfiguration configuration)
+    {
+        var connectionString = configuration.GetConnectionString("ProductDbContext");
+        connectionString ??= "Server=localhost,1438;Database=ProductDb;User=sa;Password=Your_password123;TrustServerCertificate=True";
+        Console.WriteLine(connectionString);
+        services.AddDbContext<ProductDbContext>(options =>
+            options.UseSqlServer(connectionString, c => c.MigrationsAssembly("ProductSQLInfrastructure")), ServiceLifetime.Scoped);
+        Console.WriteLine("SQL Server injection worked");
+
+        services.AddScoped<IProductRepository, ProductRepository>();
+        return services;
+    }
+
+    private static IServiceCollection AddMassTransitServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        var rabbitMQHostName = configuration["RabbitMQ:HostName"];
+        rabbitMQHostName ??= "localhost";
+        Console.WriteLine("rabbit hostname: " + rabbitMQHostName);
+        services.AddMassTransit(x =>
         {
-            services.AddMassTransit(x =>
+            // Default settings
+            x.SetDefaultEndpointNameFormatter();
+
+            // This configures rabbitmq, should be environment variables later on.
+            x.UsingRabbitMq((context, cfg) =>
             {
-                // Default settings
-                x.SetDefaultEndpointNameFormatter();
-
-                busConfigure(x);
-
-                // This configures rabbitmq, should be environment variables later on.
-                x.UsingRabbitMq((context, cfg) =>
+                cfg.Host(rabbitMQHostName, "/", h =>
                 {
-                    cfg.UseNewtonsoftJsonSerializer();
-                    cfg.UseNewtonsoftJsonDeserializer();
-                    cfg.Host("amqp://guest:guest@rabbitmq");
-                    cfg.ConfigureEndpoints(context);
+                    h.Username("guest");
+                    h.Password("guest");
                 });
+                cfg.ConfigureEndpoints(context);
             });
+        });
 
-            return services;
-        }
+        return services;
+    }
 
-        // This method is used to configure the endpoints that the application will use
-        private static void ConfigureBusEndpoints(IBusRegistrationConfigurator configurator)
+    // Method to perform database migration
+    private static void MigrateDatabase(IHost host)
+    {
+        Console.WriteLine("Starting migration");
+        using var scope = host.Services.CreateScope();
+        var services = scope.ServiceProvider;
+
+        try
         {
-            // Add all consumers here for DI. This will allow the consumers to be resolved by the DI container
-            configurator.AddConsumer<ProductAddedEventConsumer, ProductAddedEventConsumerDefinition>();
+            var dbContext = services.GetRequiredService<ProductDbContext>();
+            dbContext.Database.Migrate();
+            Console.WriteLine("Database migration successful.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred while migrating the database: {ex.Message}");
         }
     }
 }

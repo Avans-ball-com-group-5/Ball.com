@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace ProductDomain
+namespace Domain
 {
     public class Product
     {
