@@ -1,32 +1,38 @@
-﻿using Domain.Events;
+﻿using Domain;
+using Domain.Events;
+using MassTransit;
+using ProductDomain;
 
 namespace ProductService.Services
 {
     public class ProductHandler
     {
         private readonly IBus Bus;
-        public ProductHandler(IBus bus)
+        private readonly IProductRepository _productRepository;
+
+        public ProductHandler(IBus bus, IProductRepository productRepository)
         {
             Bus = bus;
+            _productRepository = productRepository;
         }
 
-        public async Task RegisterProductService(RegisterProductService registerEvent)
+        public async Task AddProductEvent(AddProductEvent message)
         {
-            // Do something with the ticket info, like saving it to a database or sending it to another service
-            // For now, we'll just publish the created event
-            Console.WriteLine("Registering Product service...");
+            var product = new Product
+            {
+                ProductId = message.ProductId,
+                Name = message.Name,
+                Price = message.Price
+            };
+            _productRepository.AddProduct(product);
 
-            // Save the product to the database
-            // Send a message to the customer service to notify them of the new product
-            await Bus.Publish(
-                new ProductServiceRegistered(
-                    registerEvent.Id,
-                    registerEvent.Name,
-                    registerEvent.Description,
-                    registerEvent.Company,
-                    registerEvent.Price,
-                    registerEvent.Stock
-                    ));
+            await Bus.Publish<ProductAddedEvent>(new
+            {
+                product.ProductId,
+                product.Name,
+                product.Price
+            });
         }
+
     }
 }
