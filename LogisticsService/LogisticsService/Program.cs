@@ -40,9 +40,10 @@ namespace LogisticsService
             services.AddDbContext<LogisticsDbContext>(options =>
                         options.UseSqlServer(connectionString, c => c.MigrationsAssembly("LogisticsSQLInfrastructure")),ServiceLifetime.Scoped);
 
-            services.AddScoped<LogisticsHandler>();
             services.AddScoped<ILogisticsRepository, LogisticsRepository>();
-            // services.AddHostedService<BusSenderBackgroundService>();
+            services.AddScoped<ITrackingRepository, TrackingRepository>();
+            services.AddScoped<LogisticsHandler>();
+            //services.AddHostedService<BusSenderBackgroundService>();
 
             return services;
         }
@@ -71,6 +72,7 @@ namespace LogisticsService
                     });
 
                     cfg.ConfigureEndpoints(context);
+                    // Use BusSenderBackgroundService
                 });
             });
             return services;

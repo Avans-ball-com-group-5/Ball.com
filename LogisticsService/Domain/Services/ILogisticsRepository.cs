@@ -10,6 +10,6 @@ namespace Domain.Services
     public interface ILogisticsRepository
     {
         LogisticsCompany GetLogisticsCompanyById(Guid id);
-        LogisticsCompany GetCheapestLogisticsCompany();
+        (LogisticsCompany Company, int Distance) GetCheapestLogisticsCompany();
     }
 }

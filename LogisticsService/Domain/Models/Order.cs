@@ -12,9 +12,7 @@ namespace Domain.Models
         public DateTime CreatedAt { get; set; }
         public Guid PaymentId { get; set; }
         public List<ItemRef> Items { get; set; } = new();
-        public LogisticsCompany? LogisticsCompany { get; set; }
         public Guid LogisticsCompanyId { get; set; }
-
 
         public override string ToString()
         {

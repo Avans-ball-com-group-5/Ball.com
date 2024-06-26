@@ -11,6 +11,7 @@ namespace LogisticsSQLInfrastructure
     public class LogisticsDbContext : DbContext
     {
         public DbSet<LogisticsCompany> LogisticsCompanies { get; set; }
+        public DbSet<Tracking> Trackings { get; set; }
         public LogisticsDbContext(DbContextOptions<LogisticsDbContext> options) : base(options)
         {
 
