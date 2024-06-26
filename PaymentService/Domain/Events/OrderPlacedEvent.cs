@@ -10,6 +10,12 @@ namespace Domain.Events
             OrderId = orderId;
             IsAfterPay = isAfterPay;
         }
+
+        public OrderPlacedEvent()
+        {
+
+        }
+
         [JsonPropertyName("id")]
         public Guid Id { get; set; } = Guid.NewGuid();
 
