@@ -29,7 +29,6 @@ services:
     productsql:
         container_name: productsql
         image: mcr.microsoft.com/mssql/server:2019-latest
-            image: mcr.microsoft.com/mssql/server:2019-latest
         environment:
             SA_PASSWORD: Your_password123
             ACCEPT_EULA: "Y"
@@ -116,6 +115,7 @@ services:
             - "5005:80"
         depends_on:
             - rabbitmq
+            - productsql
         environment:
             - ConnectionStrings__ProductDbContext=Server=productsql,1433;Database=ProductDb;User=sa;Password=Your_password123;TrustServerCertificate=True
             - RabbitMQ__HostName=rabbitmq
