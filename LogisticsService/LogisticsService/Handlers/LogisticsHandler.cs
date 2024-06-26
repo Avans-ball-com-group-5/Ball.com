@@ -4,6 +4,7 @@ using Domain.Services;
 using LogisticsSQLInfrastructure;
 using MassTransit;
 using MassTransit.Transports;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +33,6 @@ namespace LogisticsService.Handlers
             var randomDistance = result.Distance;
 
             Order order = orderEvent.Order;
-            order.LogisticsCompany = logisticsCompany;
 
             Console.WriteLine($"{divider}\n\n\tOrder {orderEvent.OrderId} will be shipped by {logisticsCompany.Name} with price:\t${randomDistance*logisticsCompany.PricePerKm} ({logisticsCompany.PricePerKm}$/km)\n\n{divider}");
 
@@ -47,21 +47,26 @@ namespace LogisticsService.Handlers
             await _bus.Publish(logisticEvent);
         }
 
-        public async Task ShipOrder(LogisticSelectionEvent logisticSelectionEvent) {
+        public async Task ShipOrder(LogisticSelectionEvent logisticSelectionEvent)
+        {
+            var order = logisticSelectionEvent.Order;
+
+            order.LogisticsCompanyId = logisticSelectionEvent.LogisticsCompanyId;
+
             Tracking tracking = new Tracking()
             {
-                Order = logisticSelectionEvent.Order,
+                Order = order,
                 OrderId = logisticSelectionEvent.OrderId,
                 Status = Status.Left_Ball_Com_Warehouse
             };
+
+            _trackingRepository.AddTracking(tracking);
 
             OrderShippedEvent shippedEvent = new OrderShippedEvent()
             {
                 LogisticsCompanyId = logisticSelectionEvent.LogisticsCompanyId,
                 TrackingId = tracking.Id
             };
-
-            _trackingRepository.AddTracking(tracking);
 
             LogisticsCompany logisticsCompany = _logisticsRepository.GetLogisticsCompanyById(logisticSelectionEvent.LogisticsCompanyId);
 
