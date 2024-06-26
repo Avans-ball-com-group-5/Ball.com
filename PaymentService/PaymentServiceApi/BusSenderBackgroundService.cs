@@ -17,8 +17,8 @@ namespace PaymentServiceApi
         {
             do
             {
-                await bus.Publish(new OrderPlacedEvent(Guid.NewGuid(), false));
-                await bus.Publish(new OrderPlacedEvent(Guid.NewGuid(), true));
+                await bus.Publish(new OrderPlacedEvent() { Price = 10.0M, IsAfterPay = false });
+                await bus.Publish(new OrderPlacedEvent() { Price = 15.0M, IsAfterPay = true });
                 await Task.Delay(30000, stoppingToken);
             } while (true);
         }

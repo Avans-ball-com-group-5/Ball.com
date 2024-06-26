@@ -26,6 +26,15 @@ services:
         ports:
             - "1437:1433"
 
+    paymentsql:
+        container_name: paymentsql
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        environment:
+            SA_PASSWORD: Your_password123
+            ACCEPT_EULA: "Y"
+        ports:
+            - "1438:1433"
+
     rabbitmq:
         container_name: rabbitmq
         image: masstransit/rabbitmq
@@ -41,9 +50,11 @@ services:
         ports:
             - "5001:80"
         depends_on:
+            - paymentsql
             - rabbitmq
         environment:
             - RabbitMQ__HostName=rabbitmq
+            - ConnectionStrings__OrderDbContext=Server=ordersql,1433;Database=PaymentDB;User=sa;Password=Your_password123;TrustServerCertificate=True
 
     orderservice:
         build:

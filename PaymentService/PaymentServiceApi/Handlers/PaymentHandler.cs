@@ -1,56 +1,63 @@
-﻿using Domain.Events;
+﻿using Domain;
+using Domain.Events;
+using Domain.Services;
 using MassTransit;
+using PaymentSQLInfrastructure;
 
 namespace PaymentServiceApi.Handlers
 {
     public class PaymentHandler
     {
-        private readonly IBus bus;
+        private readonly IBus _bus;
+        private readonly IPaymentRepository _paymentRepository;
 
-        public PaymentHandler(IBus bus)
+        public PaymentHandler(IBus bus, IPaymentRepository paymentRepository)
         {
-            this.bus = bus;
+            _bus = bus;
+           _paymentRepository = paymentRepository;
         }
 
         public async Task HandleOrderPlacedEvent(OrderPlacedEvent request)
         {
-            // Add payment to database here
-
-            // Send payment created event
-            if (request.IsAfterPay)
+            var paymentCreatedEvent = new PaymentCreatedEvent()
             {
-                var paymentCreatedEvent = new PaymentCreatedEvent()
-                {
-                    OrderId = request.OrderId,
-                };
+                OrderId = request.OrderId,
+                IsCompleted = !request.IsAfterPay
+            };
 
-                await bus.Publish(paymentCreatedEvent);
-            }
-            else
+            Payment payment = new Payment()
             {
-                var paymentCreatedEvent = new PaymentCreatedEvent()
-                {
-                    OrderId = request.OrderId,
-                    IsCompleted = true
-                };
+                Amount = request.Price,
+                IsAfterPay = request.IsAfterPay,
+                OrderId = request.OrderId,
+                IsPaid = !request.IsAfterPay
+            };
 
-                await bus.Publish(paymentCreatedEvent);
-            }
+            _paymentRepository.AddPayment(payment);
+            await _bus.Publish(paymentCreatedEvent);
         }
 
         public async Task HandleAfterPayCompletedEvent(Guid message)
         {
-            // Update db entity to completed
-            // Get orderId from db entity
-            Console.WriteLine("Payment id: " + message);
-            // Send OrderPaymentCompletedEvent
-            var orderPaymentCompletedEvent = new OrderPaymentCompletedEvent()
-            {
-                OrderId = Guid.NewGuid(),
-                PaymentId = message
-            };
+            Payment payment = _paymentRepository.GetPaymentById(message);
 
-            await bus.Publish(orderPaymentCompletedEvent);
+            if (!payment.IsPaid)
+            {
+                var orderPaymentCompletedEvent = new OrderPaymentCompletedEvent()
+                {
+                    OrderId = Guid.NewGuid(),
+                    PaymentId = message,
+                };
+
+                payment.IsPaid = true;
+                _paymentRepository.UpdatePayment(payment);
+                await _bus.Publish(orderPaymentCompletedEvent);
+            }
+            else
+            {
+                Console.WriteLine("Payment is already completed!");
+            }
+
         }
     }
 }
