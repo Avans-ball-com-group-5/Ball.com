@@ -18,7 +18,7 @@ namespace ProductService
         {
             do
             {
-                await bus.Publish(new RegisterProductService(Guid.NewGuid(), "Beer", "Tasty beer", "t'ij", 2, 50));
+                await bus.Publish(new ProductAddedEvent(Guid.NewGuid(), "Beer",  2));
                 await Task.Delay(30000, stoppingToken);
             } while (true);
         }

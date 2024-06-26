@@ -12,7 +12,6 @@ namespace ProductService
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
-            Console.WriteLine("Hello World!");
         }
 
         // This method is used to configure the host and services that the application will use, including consumers(endpoints)
@@ -60,7 +59,7 @@ namespace ProductService
         private static void ConfigureBusEndpoints(IBusRegistrationConfigurator configurator)
         {
             // Add all consumers here for DI. This will allow the consumers to be resolved by the DI container
-            configurator.AddConsumer<RegisterProductServiceConsumer, RegisterProductServiceConsumerDefinition>();
+            configurator.AddConsumer<ProductAddedEventConsumer, ProductAddedEventConsumerDefinition>();
         }
     }
 }
