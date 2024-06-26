@@ -12,15 +12,20 @@ public static class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        
-        var host = CreateHostBuilder(args).Build();
-        MigrateDatabase(host);
+
+        builder.Host.ConfigureServices((hostContext, services) =>
+        {
+            services.AddMassTransitServices(ConfigureBusEndpoints, hostContext.Configuration);
+            services.ConfigureHandlers(hostContext.Configuration);
+        });
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
+
+        MigrateDatabase(app);
 
         if (app.Environment.IsDevelopment())
         {
@@ -41,18 +46,6 @@ public static class Program
 
         app.Run();
     }
-
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-    Host.CreateDefaultBuilder(args)
-        /*.ConfigureAppConfiguration((hostingContext, config) =>
-        {
-            config.AddEnvironmentVariables();
-        })*/
-        .ConfigureServices((hostContext, services) =>
-        {
-            services.AddMassTransitServices(ConfigureBusEndpoints, hostContext.Configuration);
-            services.ConfigureHandlers(hostContext.Configuration);
-        });
 
     private static IServiceCollection ConfigureHandlers(this IServiceCollection services, IConfiguration configuration)
     {

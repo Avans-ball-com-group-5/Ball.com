@@ -17,6 +17,15 @@ services:
         ports:
             - "1436:1433"
 
+    customersql:
+        container_name: customersql
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        environment:
+            SA_PASSWORD: Your_password123
+            ACCEPT_EULA: "Y"
+        ports:
+            - "1437:1433"
+
     rabbitmq:
         container_name: rabbitmq
         image: masstransit/rabbitmq
