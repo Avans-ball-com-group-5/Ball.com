@@ -1,13 +1,8 @@
 ﻿using Domain.Events;
 using MassTransit;
-using OrderService.Handlers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using OrderServiceApi.Handlers;
 
-namespace OrderService.Consumers
+namespace OrderServiceApi.Consumers
 {
     public class PlaceOrderConsumer : IConsumer<PlaceOrderEvent>
     {

@@ -1,13 +1,8 @@
 ﻿using MassTransit;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace OrderService.Consumers
+namespace OrderServiceApi.Consumers
 {
-    public  class PlaceOrderConsumerDefinition: ConsumerDefinition<PlaceOrderConsumer>
+    public class PlaceOrderConsumerDefinition : ConsumerDefinition<PlaceOrderConsumer>
     {
         public PlaceOrderConsumerDefinition()
         {

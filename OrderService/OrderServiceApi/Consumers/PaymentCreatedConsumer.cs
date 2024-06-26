@@ -1,8 +1,8 @@
 ﻿using Domain.Events;
 using MassTransit;
-using OrderService.Handlers;
+using OrderServiceApi.Handlers;
 
-namespace OrderService.Consumers
+namespace OrderServiceApi.Consumers
 {
     public class PaymentCreatedConsumer : IConsumer<PaymentCreatedEvent>
     {

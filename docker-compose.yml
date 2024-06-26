@@ -39,7 +39,7 @@ services:
     orderservice:
         build:
             context: ./OrderService
-            dockerfile: OrderService/Dockerfile
+            dockerfile: OrderServiceApi/Dockerfile
         container_name: orderservice
         ports:
             - "5002:80"

@@ -1,9 +1,8 @@
-﻿using Domain;
-using Domain.Events;
+﻿using Domain.Events;
 using Domain.Services;
 using MassTransit;
 
-namespace OrderService.Handlers
+namespace OrderServiceApi.Handlers
 {
     public class OrderEventHandler
     {
@@ -29,7 +28,7 @@ namespace OrderService.Handlers
             _orderCommandHandler.SaveOrderEvent(orderPlacedEvent);
             await _bus.Publish(orderPlacedEvent);
         }
-        
+
         public async Task ManageOrder(PaymentCreatedEvent @event)
         {
             Console.WriteLine($"Payment created for order {@event.OrderId}");

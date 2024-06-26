@@ -12,8 +12,8 @@ using OrderSQLInfrastructure;
 namespace OrderSQLInfrastructure.Migrations
 {
     [DbContext(typeof(OrderEventDbContext))]
-    [Migration("20240625162831_Init")]
-    partial class Init
+    [Migration("20240626103619_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,9 +46,6 @@ namespace OrderSQLInfrastructure.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasAnnotation("Relational:JsonPropertyName", "orderId");
 
-                    b.Property<Guid?>("PaymentId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2")
                         .HasAnnotation("Relational:JsonPropertyName", "timestamp");
@@ -66,6 +63,10 @@ namespace OrderSQLInfrastructure.Migrations
 
                     b.Property<int>("Amount")
                         .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("OrderId")
                         .HasColumnType("uniqueidentifier");

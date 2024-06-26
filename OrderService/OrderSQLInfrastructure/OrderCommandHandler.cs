@@ -2,11 +2,7 @@
 using Domain.Events;
 using Domain.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Diagnostics.Tracing;
 
 namespace OrderSQLInfrastructure
 {
