@@ -2,7 +2,6 @@
 using Domain.Events;
 using Domain.Services;
 using MassTransit;
-using PaymentSQLInfrastructure;
 
 namespace PaymentServiceApi.Handlers
 {
@@ -14,23 +13,28 @@ namespace PaymentServiceApi.Handlers
         public PaymentHandler(IBus bus, IPaymentRepository paymentRepository)
         {
             _bus = bus;
-           _paymentRepository = paymentRepository;
+            _paymentRepository = paymentRepository;
         }
 
         public async Task HandleOrderPlacedEvent(OrderPlacedEvent request)
         {
+            var isCompleted = false;
+            if (new Random().Next(0, 2) == 0)
+            {
+                isCompleted = true;
+            }
             var paymentCreatedEvent = new PaymentCreatedEvent()
             {
                 OrderId = request.OrderId,
-                IsCompleted = !request.IsAfterPay
+                IsCompleted = isCompleted
             };
 
-            Payment payment = new Payment()
+            Payment payment = new()
             {
-                Amount = request.Price,
-                IsAfterPay = request.IsAfterPay,
+                Amount = new Random().Next(0, 100),
+                IsAfterPay = !isCompleted,
                 OrderId = request.OrderId,
-                IsPaid = !request.IsAfterPay
+                IsPaid = isCompleted
             };
 
             _paymentRepository.AddPayment(payment);
@@ -57,7 +61,6 @@ namespace PaymentServiceApi.Handlers
             {
                 Console.WriteLine("Payment is already completed!");
             }
-
         }
     }
 }

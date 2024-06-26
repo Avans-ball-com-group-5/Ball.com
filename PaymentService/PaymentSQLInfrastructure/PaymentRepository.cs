@@ -1,16 +1,12 @@
 ﻿using Domain;
 using Domain.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PaymentSQLInfrastructure
 {
     public class PaymentRepository : IPaymentRepository
     {
         private readonly PaymentDbContext _context;
+
         public PaymentRepository(PaymentDbContext context)
         {
             _context = context;

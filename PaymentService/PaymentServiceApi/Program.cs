@@ -1,11 +1,9 @@
+using Domain.Services;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using PaymentServiceApi.Consumers;
-using PaymentSQLInfrastructure;
-using PaymentServiceApi.Controllers;
 using PaymentServiceApi.Handlers;
-using Domain.Services;
-
+using PaymentSQLInfrastructure;
 
 namespace PaymentServiceApi;
 

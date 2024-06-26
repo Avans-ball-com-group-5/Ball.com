@@ -9,7 +9,6 @@ namespace PaymentSQLInfrastructure
 
         public PaymentDbContext(DbContextOptions<PaymentDbContext> options) : base(options)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
