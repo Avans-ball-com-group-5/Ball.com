@@ -1,7 +1,7 @@
 ﻿using Domain.Events;
 using MassTransit;
 
-namespace CustomerService.Services
+namespace CustomerServiceApi.Services
 {
     public class CustomerHandler
     {
@@ -11,7 +11,7 @@ namespace CustomerService.Services
             Bus = bus;
         }
 
-        public async Task RegisterCustomerService(RegisterCustomerServiceTicket registerEvent)
+        public async Task RegisterCustomerServiceTicket(RegisterCustomerServiceTicket registerEvent)
         {
             // Do something with the ticket info, like saving it to a database or sending it to another service
             // For now, we'll just publish the created event
@@ -20,9 +20,6 @@ namespace CustomerService.Services
             await Bus.Publish(
                 new CustomerServiceTicketRegistered(
                     registerEvent.CustomerId,
-                    registerEvent.Name,
-                    registerEvent.Email,
-                    registerEvent.Phone,
                     registerEvent.Message,
                     Guid.NewGuid()));
         }

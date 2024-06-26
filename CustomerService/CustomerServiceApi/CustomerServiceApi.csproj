@@ -4,11 +4,12 @@
         <TargetFramework>net6.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <UserSecretsId>2e075b26-eb50-4791-8880-3aa594fe580e</UserSecretsId>
+        <UserSecretsId>3f31dce5-7e06-465d-8d3d-432d83301fa8</UserSecretsId>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
         <PackageReference Include="MassTransit" Version="8.2.2" />
         <PackageReference Include="MassTransit.Abstractions" Version="8.2.2" />
         <PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
@@ -16,12 +17,11 @@
         <PackageReference Include="MassTransit.Newtonsoft" Version="8.2.2" />
         <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.2" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
         <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.2" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Domain\Domain.csproj" />
+      <ProjectReference Include="..\Domain\Domain.csproj" />
     </ItemGroup>
 
 </Project>

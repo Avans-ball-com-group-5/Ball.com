@@ -1,8 +1,8 @@
-﻿using CustomerService.Services;
+﻿using CustomerServiceApi.Services;
 using Domain.Events;
 using MassTransit;
 
-namespace CustomerService.Messaging
+namespace CustomerServiceApi.Messaging
 {
     public class RegisterCustomerServiceTicketConsumer : IConsumer<RegisterCustomerServiceTicket>
     {
@@ -14,7 +14,7 @@ namespace CustomerService.Messaging
 
         public async Task Consume(ConsumeContext<RegisterCustomerServiceTicket> context)
         {
-            await _customerHandler.RegisterCustomerService(context.Message);
+            await _customerHandler.RegisterCustomerServiceTicket(context.Message);
         }
     }
 }

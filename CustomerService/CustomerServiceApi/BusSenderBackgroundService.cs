@@ -2,7 +2,7 @@
 using MassTransit;
 using Microsoft.Extensions.Hosting;
 
-namespace CustomerService
+namespace CustomerServiceApi
 {
     public class BusSenderBackgroundService : BackgroundService
     {
@@ -17,7 +17,7 @@ namespace CustomerService
         {
             do
             {
-                await bus.Publish(new RegisterCustomerServiceTicket(Guid.NewGuid(), "John Doe", "email", "phone", "message"));
+                await bus.Publish(new RegisterCustomerServiceTicket(Guid.NewGuid(), "message"));
                 await Task.Delay(30000, stoppingToken);
             } while (true);
         }
