@@ -26,6 +26,15 @@ services:
         ports:
             - "1437:1433"
 
+    productsql:
+        container_name: productsql
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        environment:
+            SA_PASSWORD: Your_password123
+            ACCEPT_EULA: "Y"
+        ports:
+            - "1438:1433"
+
     rabbitmq:
         container_name: rabbitmq
         image: masstransit/rabbitmq
@@ -68,6 +77,7 @@ services:
             - "5003:80"
         depends_on:
             - rabbitmq
+            - logisticssql
         environment:
             - ConnectionStrings__LogisticsDbContext=Server=logisticssql,1433;Database=LogisticsDB;User=sa;Password=Your_password123;TrustServerCertificate=True
             - RabbitMQ__HostName=rabbitmq
@@ -81,6 +91,20 @@ services:
             - "5004:80"
         depends_on:
             - rabbitmq
+            - customersql
         environment:
-            - ConnectionStrings__CustomerDbContext=Server=Customersql,1433;Database=CustomerDB;User=sa;Password=Your_password123;TrustServerCertificate=True
+            - ConnectionStrings__CustomerDbContext=Server=customersql,1433;Database=CustomerDB;User=sa;Password=Your_password123;TrustServerCertificate=True
+            - RabbitMQ__HostName=rabbitmq
+
+    productservice:
+        build:
+            context: ./ProductService
+            dockerfile: ProductService/Dockerfile
+        container_name: productservice
+        ports:
+            - "5005:80"
+        depends_on:
+            - rabbitmq
+        environment:
+            - ConnectionStrings__ProductDbContext=Server=productsql,1433;Database=ProductDb;User=sa;Password=Your_password123;TrustServerCertificate=True
             - RabbitMQ__HostName=rabbitmq

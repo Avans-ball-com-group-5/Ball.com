@@ -1,11 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ProductDomain;
+﻿using Domain;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Reflection.Emit;
 
 namespace ProductSQLInfrastructure
 {
     public class ProductDbContext : DbContext
     {
-        public DbSet<Product> products { get; set; }
+        public DbSet<Product> Products { get; set; }
         public ProductDbContext(DbContextOptions<ProductDbContext> options) : base(options)
         {
         }
