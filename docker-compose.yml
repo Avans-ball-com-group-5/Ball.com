@@ -41,6 +41,7 @@ services:
         environment:
             SA_PASSWORD: Your_password123
             ACCEPT_EULA: "Y"
+        ports:
             - "1439:1433"
 
     rabbitmq:
