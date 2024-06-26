@@ -62,3 +62,16 @@ services:
         environment:
             - ConnectionStrings__LogisticsDbContext=Server=logisticssql,1433;Database=LogisticsDB;User=sa;Password=Your_password123;TrustServerCertificate=True
             - RabbitMQ__HostName=rabbitmq
+
+    customerservice:
+        build:
+            context: ./CustomerService
+            dockerfile: CustomerServiceApi/Dockerfile
+        container_name: customerserviceapi
+        ports:
+            - "5004:80"
+        depends_on:
+            - rabbitmq
+        environment:
+            - ConnectionStrings__CustomerDbContext=Server=Customersql,1433;Database=CustomerDB;User=sa;Password=Your_password123;TrustServerCertificate=True
+            - RabbitMQ__HostName=rabbitmq

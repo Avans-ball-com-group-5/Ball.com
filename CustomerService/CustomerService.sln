@@ -5,9 +5,9 @@ VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{10C8BA27-A2AB-458B-9661-9734152D6DD0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomerServiceApi", "CustomerServiceApi\CustomerServiceApi.csproj", "{1DBB7BE0-67F2-4001-AB28-BF79E1060379}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerServiceApi", "CustomerServiceApi\CustomerServiceApi.csproj", "{1DBB7BE0-67F2-4001-AB28-BF79E1060379}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomerSQLInfastructure", "CustomerSQLInfastructure\CustomerSQLInfastructure.csproj", "{A47CAAD6-C421-49C0-BCB9-093A76C586D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerSQLInfrastructure", "CustomerSQLInfastructure\CustomerSQLInfrastructure.csproj", "{A47CAAD6-C421-49C0-BCB9-093A76C586D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

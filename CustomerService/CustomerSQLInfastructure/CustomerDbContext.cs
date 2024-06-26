@@ -1,7 +1,7 @@
 ﻿using Domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace CustomerSQLInfastructure
+namespace CustomerSQLInfrastructure
 {
     public class CustomerDbContext : DbContext
     {
