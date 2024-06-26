@@ -1,25 +1,43 @@
-﻿using Domain.Events;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using MassTransit;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace CustomerServiceApi
 {
     public class BusSenderBackgroundService : BackgroundService
     {
-        private readonly IBus bus;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly ILogger<BusSenderBackgroundService> _logger;
 
-        public BusSenderBackgroundService(IBus bus)
+        public BusSenderBackgroundService(IServiceProvider serviceProvider, ILogger<BusSenderBackgroundService> logger)
         {
-            this.bus = bus;
+            _serviceProvider = serviceProvider;
+            _logger = logger;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             do
             {
-                await bus.Publish(new RegisterCustomerServiceTicket(Guid.NewGuid(), "message"));
+                try
+                {
+                    using (var scope = _serviceProvider.CreateScope())
+                    {
+                        var customerDataService = scope.ServiceProvider.GetRequiredService<CustomerServiceApi.Services.CustomerDataService>();
+                        await customerDataService.ProcessCustomerDataAsync();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error processing CSV data: {ex.Message}");
+                }
+
                 await Task.Delay(TimeSpan.FromHours(24), stoppingToken);
-            } while (true);
+            } while (!stoppingToken.IsCancellationRequested);
         }
     }
 }

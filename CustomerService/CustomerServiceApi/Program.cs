@@ -1,6 +1,9 @@
 using CustomerServiceApi.Messaging;
 using CustomerServiceApi.Services;
+using CustomerSQLInfrastructure;
+using Domain.Services;
 using MassTransit;
+using Microsoft.EntityFrameworkCore;
 
 namespace CustomerServiceApi;
 
@@ -12,20 +15,18 @@ public static class Program
 
         builder.Host.ConfigureServices((hostContext, services) =>
         {
-            services.AddMassTransitServices(ConfigureBusEndpoints);
-            services.ConfigureHandlers();
+            services.AddMassTransitServices(ConfigureBusEndpoints, hostContext.Configuration);
+            services.ConfigureHandlers(hostContext.Configuration);
         });
 
-        // Add services to the container.
-
         builder.Services.AddControllers();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
+        MigrateDatabase(app);
+
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
@@ -46,18 +47,26 @@ public static class Program
         app.Run();
     }
 
-    private static IServiceCollection ConfigureHandlers(this IServiceCollection services)
+    private static IServiceCollection ConfigureHandlers(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<CustomerHandler>();
+        var connectionString = configuration.GetConnectionString("CustomerDbContext");
+        connectionString ??= "Server=localhost,1436;Database=CustomerDb;User=sa;Password=Your_password123;TrustServerCertificate=True";
+        services.AddDbContext<CustomerDbContext>(options =>
+                    options.UseSqlServer(connectionString, c => c.MigrationsAssembly("CustomerSQLInfrastructure")), ServiceLifetime.Scoped);
 
-        // This adds a service that will run in the background and send messages to the bus every 30 seconds for testing purposes
+        services.AddScoped<CustomerHandler>();
+        services.AddScoped<ICustomerRepository, CustomerRepository>();
+        services.AddScoped<CustomerDataService>();
         services.AddHostedService<BusSenderBackgroundService>();
 
         return services;
     }
 
-    private static IServiceCollection AddMassTransitServices(this IServiceCollection services, Action<IBusRegistrationConfigurator> busConfigure)
+    private static IServiceCollection AddMassTransitServices(this IServiceCollection services, Action<IBusRegistrationConfigurator> busConfigure, IConfiguration configuration)
     {
+        var rabbitMQHostName = configuration["RabbitMQ:HostName"];
+        rabbitMQHostName ??= "localhost";
+        Console.WriteLine("rabbit hostname: " + rabbitMQHostName);
         services.AddMassTransit(x =>
         {
             // Default settings
@@ -71,7 +80,11 @@ public static class Program
                 cfg.UseDelayedRedelivery(r => r.Interval(5, TimeSpan.FromSeconds(30)));
                 cfg.UseNewtonsoftJsonSerializer();
                 cfg.UseNewtonsoftJsonDeserializer();
-                cfg.Host("amqp://guest:guest@rabbitmq");
+                cfg.Host(rabbitMQHostName, "/", h =>
+                {
+                    h.Username("guest");
+                    h.Password("guest");
+                });
                 cfg.ConfigureEndpoints(context);
             });
         });
@@ -84,6 +97,24 @@ public static class Program
     {
         // Add all consumers here for DI. This will allow the consumers to be resolved by the DI container
         configurator.AddConsumer<RegisterCustomerServiceTicketConsumer, RegisterCustomerServiceTicketConsumerDefinition>();
+    }
+
+    private static void MigrateDatabase(IHost host)
+    {
+        Console.WriteLine("Starting migration");
+        using var scope = host.Services.CreateScope();
+        var services = scope.ServiceProvider;
+
+        try
+        {
+            var dbContext = services.GetRequiredService<CustomerDbContext>();
+            dbContext.Database.Migrate();
+            Console.WriteLine("Database migration successful.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred while migrating the database: {ex.Message}");
+        }
     }
 }
 
